@@ -1,7 +1,6 @@
 #include "Unit.h"
 
 using namespace cocos2d;
-using namespace extension;
 
 void Unit::move(const Direction& dir) {
 	switch (dir)
@@ -22,11 +21,11 @@ void Unit::move(const Direction& dir) {
 }
 
 bool Unit::init() {
-	return PhysicsSprite::init();
+	return BoxSprite::init();
 }
 
 bool Unit::initWithFile(const std::string& filename) {
-	return PhysicsSprite::initWithFile(filename);
+	return BoxSprite::initWithFile(filename);
 }
 
 void Unit::play(std::string name, int count) {

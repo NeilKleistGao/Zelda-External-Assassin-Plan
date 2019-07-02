@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "BoxSprite.h"
 
 enum Direction {
 	Up = 0,
@@ -11,7 +11,7 @@ enum Direction {
 	Right
 };
 
-class Unit : public cocos2d::extension::PhysicsSprite {
+class Unit : public BoxSprite {
 public:
 	Unit() : HP(100), speed(10.0f), damage(5) {
 	}

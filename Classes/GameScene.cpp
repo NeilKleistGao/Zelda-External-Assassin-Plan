@@ -1,21 +1,24 @@
 #include"GameScene.h"
 #include"GameUILayer.h"
+#include "GameLayer.h"
+
 using namespace cocos2d;
+
 Scene* GameScene::createScene() {
+	auto scene = GameScene::createWithPhysics();
+	auto theWorld = scene->getPhysicsWorld();
 
-	return GameScene::create();
-}
+	theWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+	theWorld->setGravity(Vec2::ZERO);
 
-bool GameScene::init() {
+	auto game = GameLayer::create();
+	game->setPosition(Vec2::ZERO);
+	game->setPhysicsWorld(scene->getPhysicsWorld());
+	scene->addChild(game, 1);
 
-	if (!Scene::init()) {
-
-		return false;
-	}
-	auto ui =GameUILayer::create();
+	auto ui = GameUILayer::create();
 	ui->setPosition(Vec2::ZERO);
-	this->addChild(ui);
+	scene->addChild(ui, 2);
 
-	return true;
-
+	return scene;
 }
