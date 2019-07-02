@@ -11,8 +11,11 @@ enum Direction {
 	Right
 };
 
-class Unit : cocos2d::extension::PhysicsSprite {
+class Unit : public cocos2d::extension::PhysicsSprite {
 public:
+	Unit() : HP(100), speed(10.0f), damage(5) {
+	}
+
 	void move(const Direction&);
 	virtual bool init();
 	virtual bool initWithFile(const std::string&);
@@ -22,8 +25,7 @@ public:
 		this->stopAllActions();
 	}
 
-private:
+protected:
 	int HP, damage;
 	float speed;
 };
-

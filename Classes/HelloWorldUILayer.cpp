@@ -1,4 +1,5 @@
 #include "HelloWorldUILayer.h"
+#include "SelectScene.h"
 
 using namespace cocos2d;
 
@@ -23,7 +24,7 @@ bool HelloWorldUILayer::init() {
 	//add keyboard event
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
-		//TODO:
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::createScene()));
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
