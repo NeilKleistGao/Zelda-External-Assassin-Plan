@@ -28,3 +28,17 @@ bool Unit::init() {
 bool Unit::initWithFile(const std::string& filename) {
 	return PhysicsSprite::initWithFile(filename);
 }
+
+void Unit::play(std::string name, int count) {
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(name + ".plist");
+	Vector<AnimationFrame*> frames;
+
+	char temp[64];
+	for (int i = 0; i < count; i++) {
+		sprintf(temp, (name + "%d.png").c_str(), i);
+		frames.pushBack(AnimationFrame::create(SpriteFrameCache::getInstance()->getSpriteFrameByName(temp), 1, ValueMap()));
+	}
+
+	auto anim = Animate::create(Animation::create(frames, 0.1f, 1));
+	this->runAction(RepeatForever::create(anim));
+}

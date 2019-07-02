@@ -17,7 +17,10 @@ public:
 	virtual bool init();
 	virtual bool initWithFile(const std::string&);
 
-	//TODO:
+	void play(std::string, int);
+	inline void stop() {
+		this->stopAllActions();
+	}
 
 private:
 	int HP, damage;
