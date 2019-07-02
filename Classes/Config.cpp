@@ -5,7 +5,7 @@
 #include<map>
 #include<vector>
 void Config::loadConfig(std::string filename) {
-	if (filename == "enemy.csv") {
+	if (filename == "config/enemy.csv") {
 		std::fstream EnemyFile(filename);
 		std::string data;
 		std::getline(EnemyFile,data);//跳过第一行
@@ -22,7 +22,7 @@ void Config::loadConfig(std::string filename) {
 	}
 		EnemyFile.close();
 	}
-	else if (filename == "objects.csv") {
+	else if (filename == "config/objects.csv") {
 		std::fstream ObjectFile(filename);
 		std::string data;
 		std::getline(ObjectFile, data);//跳过第一行
