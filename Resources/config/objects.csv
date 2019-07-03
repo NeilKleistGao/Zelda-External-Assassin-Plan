@@ -1,1 +1,13 @@
 object_name,image_path,info_text
+key1,Game/key1.png,Congratulations! You can use it to open a door!
+key2,Game/key2.png,Congratulations! You can use it to open a door!
+key3,Game/key3.png,Congratulations! You can use it to open a door!
+key4,Game/key4.png,Congratulations! You can use it to open a door!
+key5,Game/key5.png,Congratulations! You can use it to open a door!
+key6,Game/key6.png,Congratulations! You can use it to open a door!
+bullet,Game/bullet.png,Congratulations! You found some bullets!
+strengthGloove,Game/strengthGloove.png,Congratulations! You found a gloove! You become stronger!
+plumage,Game/plumage.png,Congratulations! You found a plumage!You become lighter!
+healthPotion,Game/healthPotion.png,Congratulations! Your life is rstored! 
+doubleDamage,Game/doubleDamage.png,You damage has increased
+fipperWebFoot,Game/fipperWebFoot.png,You can diving now!
