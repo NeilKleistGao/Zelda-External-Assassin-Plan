@@ -1,4 +1,6 @@
 #include "PauseUILayer.h"
+#include<string.h>
+#include<vector>
 using namespace cocos2d;
 bool PauseUILayer::init() {
 	if (!Layer::init()) {
@@ -14,30 +16,28 @@ bool PauseUILayer::init() {
 	backgound->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height / 2));
 	this->addChild(backgound, 0);
 
-	// objects
-	float offset = 0.1f;
-	for (int i = 1; i <= 6; i++) {
-		std::string filename = "Game/key";
-		filename += (char)(i + '0'); filename += ".png";
-		auto sprite = Sprite::create(filename);
-		sprite->setPosition(origin.x + visibleSize.width * 0.1f, origin.y + visibleSize.height*offset);
-		this->addChild(sprite);
-		offset += 0.13f;
-	}
-
-	float offset_ = 0.1f;
-	for (int i = 1; i <= 6; i++) {
-		std::string filename_ = "Game/P";
-		filename_ += (char)(i + '0'); filename_ += ".png";
-		auto sprite_ = Sprite::create(filename_);
-		sprite_->setPosition(origin.x + visibleSize.width * 0.6f, origin.y + visibleSize.height*offset_);
-		this->addChild(sprite_);
-		offset_+= 0.13f;
-	}
-
-	auto label = Label::createWithTTF("PAUSE", "fonts/sans.ttf", 40);
+    auto label = Label::createWithTTF("PAUSE", "fonts/sans.ttf", 40);
 	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height*0.9f);
 	this->addChild(label, 1, "pause");
+
+	auto sprite1 = Sprite::create("Game/P1.png");
+	sprite1->setScale(0.8, 0.8);
+	sprite1->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.95f);
+	this->addChild(sprite1);
+
+	auto sprite2 = Sprite::create("Game/Blood.png");
+	sprite2->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.85f);
+	this->addChild(sprite2);
+
+	std::vector<std::string> v1{ "Game/key1.png","Game/key2.png" };
+	float offset = 0.1f;
+	for (auto a = v1.begin(); a != v1.end(); a++) {
+		auto sprite_ = Sprite::create(*a);
+		sprite_->setPosition(origin.x + visibleSize.width*offset, origin.y + visibleSize.height*0.5f);
+		this->addChild(sprite_);
+		offset += 0.1f;
+	}
+
 
 	return true;
 }
