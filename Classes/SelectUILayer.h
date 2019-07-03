@@ -7,6 +7,4 @@ class SelectUILayer :
 public:
 	virtual bool init();
 	CREATE_FUNC(SelectUILayer);
-
-	void update(float);
 };
