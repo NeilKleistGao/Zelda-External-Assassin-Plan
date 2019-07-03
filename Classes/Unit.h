@@ -1,31 +1,49 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include "cocos2d.h"
 #include "BoxSprite.h"
 
-enum Direction {
-	Up = 0,
-	Down,
-	Left,
-	Right
-};
-
 class Unit : public BoxSprite {
 public:
-	Unit() : HP(100), speed(10.0f), damage(5) {
+	enum Direction {
+		Up,
+		Down,
+		Left,
+		Right
+	};
+
+	enum Status {
+		Stand,
+		Swim,
+		Jump
+	};
+
+	Unit() : HP(4), speed(100.0f), damage(5) {
 	}
 
-	void move(const Direction&);
+	inline void setDirection(const Direction& d) {
+		animationIndex = (direction == d) ? animationIndex : 0;
+		direction = d;
+	}
+	
+	void move(Status);
+	void stop();
 	virtual bool init();
 	virtual bool initWithFile(const std::string&);
 
-	void play(std::string, int);
-	inline void stop() {
-		this->stopAllActions();
-	}
+	void update(float);
 
 protected:
+	std::map<std::string, int> frameCount;
+	Direction direction;
+	Status status;
 	int HP, damage;
 	float speed;
+
+private:
+	std::string frameName;
+	int animationIndex;
+	bool isMoving;
 };

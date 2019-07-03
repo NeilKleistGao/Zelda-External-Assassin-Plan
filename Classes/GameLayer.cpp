@@ -22,8 +22,9 @@ bool GameLayer::init() {
 
 	//add player
 	auto player = Player::create("Game/playerDown0.png");
-	player->setScale(5, 5);
-	player->setPosition(10, 10);
+	player->setName("player");
+	player->setScale(2.5, 2.5);
+	player->setPosition(100, 100);
 	this->addChild(player);
 
 	//add contact call back function
@@ -36,31 +37,29 @@ bool GameLayer::init() {
 
 	//add keyboard call back function
 	auto klistener = EventListenerKeyboard::create();
-	klistener->onKeyPressed = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
+	klistener->onKeyPressed = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) noexcept {
+		CCLOG("wryyyy");
 		switch (code)
 		{
 		case cocos2d::EventKeyboard::KeyCode::KEY_A:
+			player->setDirection(Unit::Direction::Left);
 			break;
 		case cocos2d::EventKeyboard::KeyCode::KEY_D:
+			player->setDirection(Unit::Direction::Right);
 			break;
 		case cocos2d::EventKeyboard::KeyCode::KEY_S:
+			player->setDirection(Unit::Direction::Down);
 			break;
 		case cocos2d::EventKeyboard::KeyCode::KEY_W:
+			player->setDirection(Unit::Direction::Up);
 			break;
 		}
+
+		player->move(Unit::Status::Stand);
 	};
-	klistener->onKeyReleased = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
-		switch (code)
-		{
-		case cocos2d::EventKeyboard::KeyCode::KEY_A:
-			break;
-		case cocos2d::EventKeyboard::KeyCode::KEY_D:
-			break;
-		case cocos2d::EventKeyboard::KeyCode::KEY_S:
-			break;
-		case cocos2d::EventKeyboard::KeyCode::KEY_W:
-			break;
-		}
+
+	klistener->onKeyReleased = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) noexcept {
+		player->stop();
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(klistener, this);
 

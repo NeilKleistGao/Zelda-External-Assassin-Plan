@@ -33,5 +33,12 @@ bool Player::init() {
 }
 
 bool Player::initWithFile(const std::string& filename) {
-	return Unit::initWithFile(filename);
+	if (!Unit::initWithFile(filename)) {
+		return false;
+	}
+
+	frameCount["playerDown"] = frameCount["playerUp"] = frameCount["playerLeft"] = frameCount["playerRight"] = 2;
+	status = Status::Stand;
+
+	return true;
 }

@@ -2,22 +2,71 @@
 
 using namespace cocos2d;
 
-void Unit::move(const Direction& dir) {
-	switch (dir)
+void Unit::move(Status s) {
+	frameName = this->getName();
+
+	if (s != status) {
+		animationIndex = 0;
+		status = s;
+	}
+
+	if (s == Status::Jump) {
+		frameName += "Jump";
+	}
+	else if (s == Status::Swim) {
+		frameName += "Swim";
+	}
+
+	auto body = this->getPhysicsBody();
+
+	switch (direction)
 	{
 	case Up:
-		this->setPositionY(this->getPositionY() + this->speed);
+		frameName += "Up";
+		body->setVelocity(Vec2(0, speed));
 		break;
 	case Down:
-		this->setPositionY(this->getPositionY() - this->speed);
+		frameName += "Down";
+		body->setVelocity(Vec2(0, -speed));
 		break;
 	case Left:
-		this->setPositionX(this->getPositionX() - this->speed);
+		frameName += "Left";
+		body->setVelocity(Vec2(-speed, 0));
 		break;
 	case Right:
-		this->setPositionX(this->getPositionX() + this->speed);
+		frameName += "Right";
+		body->setVelocity(Vec2(speed, 0));
 		break;
 	}
+	
+	isMoving = true;
+}
+
+void Unit::stop() {
+	std::string frameName = this->getName();
+
+	switch (direction)
+	{
+	case Up:
+		frameName += "Up";
+		break;
+	case Down:
+		frameName += "Down";
+		break;
+	case Left:
+		frameName += "Left";
+		break;
+	case Right:
+		frameName += "Right";
+		break;
+	}
+
+	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(frameName + "0");
+	this->setSpriteFrame(frame);
+
+	auto body = this->getPhysicsBody();
+	body->setVelocity(Vec2::ZERO);
+	isMoving = false;
 }
 
 bool Unit::init() {
@@ -25,19 +74,21 @@ bool Unit::init() {
 }
 
 bool Unit::initWithFile(const std::string& filename) {
-	return BoxSprite::initWithFile(filename);
-}
-
-void Unit::play(std::string name, int count) {
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(name + ".plist");
-	Vector<AnimationFrame*> frames;
-
-	char temp[64];
-	for (int i = 0; i < count; i++) {
-		sprintf(temp, (name + "%d.png").c_str(), i);
-		frames.pushBack(AnimationFrame::create(SpriteFrameCache::getInstance()->getSpriteFrameByName(temp), 1, ValueMap()));
+	if (!BoxSprite::initWithFile(filename)) {
+		return false;
 	}
 
-	auto anim = Animate::create(Animation::create(frames, 0.1f, 1));
-	this->runAction(RepeatForever::create(anim));
+	this->schedule(schedule_selector(Unit::update), 5.0f);
+	return true;
+}
+
+void Unit::update(float dt) {
+	if (!isMoving) {
+		return;
+	}
+
+	std::string realName = frameName + (char)(animationIndex + '0');
+	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(realName);
+	this->setSpriteFrame(frame);
+	animationIndex = (animationIndex + 1) % frameCount[frameName];
 }

@@ -101,7 +101,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glview->setDesignResolutionSize(mediumResolutionSize.width, mediumResolutionSize.height, ResolutionPolicy::NO_BORDER);
     auto frameSize = glview->getFrameSize();
     // if the frame's height is larger than the height of medium size.
-    if (frameSize.height > mediumResolutionSize.height)
+    /*if (frameSize.height > mediumResolutionSize.height)
     {        
         director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
     }
@@ -114,9 +114,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     else
     {        
         director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
-    }
+    }*/
 
     register_all_packages();
+
+	preload();
 
     // create a scene. it's an autorelease object
     //auto scene = HelloWorld::createScene();
@@ -150,4 +152,16 @@ void AppDelegate::applicationWillEnterForeground() {
     SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
+}
+
+void AppDelegate::preload() {
+	auto cache = SpriteFrameCache::getInstance();
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerDown0.png", Rect(0, 0, 14, 16)), "playerDown0");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerDown1.png", Rect(0, 0, 14, 16)), "playerDown1");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerUp0.png", Rect(0, 0, 14, 16)), "playerUp0");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerUp1.png", Rect(0, 0, 14, 16)), "playerUp1");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerLeft0.png", Rect(0, 0, 14, 16)), "playerLeft0");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerLeft1.png", Rect(0, 0, 14, 16)), "playerLeft1");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerRight0.png", Rect(0, 0, 14, 16)), "playerRight0");
+	cache->addSpriteFrame(SpriteFrame::create("Game/playerRight1.png", Rect(0, 0, 14, 16)), "playerRight1");
 }
