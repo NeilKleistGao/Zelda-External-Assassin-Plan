@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <map>
+#include <set>
 #include "Unit.h"
 
 class Player :
@@ -14,7 +14,7 @@ public:
 	virtual bool initWithFile(const std::string&);
 
 private:
-	std::map<std::string, int> collection;
+	std::set<std::string> collection;
 	int bulletCount;
 };
 

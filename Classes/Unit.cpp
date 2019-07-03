@@ -78,17 +78,24 @@ bool Unit::initWithFile(const std::string& filename) {
 		return false;
 	}
 
-	this->schedule(schedule_selector(Unit::update), 5.0f);
+	this->schedule(schedule_selector(Unit::update), 1.0f);
 	return true;
 }
 
 void Unit::update(float dt) {
 	if (!isMoving) {
+		timer = 0.0f;
 		return;
 	}
 
-	std::string realName = frameName + (char)(animationIndex + '0');
-	auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(realName);
-	this->setSpriteFrame(frame);
-	animationIndex = (animationIndex + 1) % frameCount[frameName];
+	timer += dt;
+
+	if (timer >= animationDelta) {
+		std::string realName = frameName + (char)(animationIndex + '0');
+		auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(realName);
+		this->setSpriteFrame(frame);
+		animationIndex = (animationIndex + 1) % frameCount[frameName];
+
+		timer = 0;
+	}
 }

@@ -20,7 +20,7 @@ public:
 		Jump
 	};
 
-	Unit() : HP(4), speed(100.0f), damage(5) {
+	Unit() : HP(4), speed(100.0f), damage(5), animationDelta(0.2f) {
 	}
 
 	inline void setDirection(const Direction& d) {
@@ -33,7 +33,7 @@ public:
 	virtual bool init();
 	virtual bool initWithFile(const std::string&);
 
-	void update(float);
+	virtual void update(float);
 
 protected:
 	std::map<std::string, int> frameCount;
@@ -46,4 +46,7 @@ private:
 	std::string frameName;
 	int animationIndex;
 	bool isMoving;
+	float timer;
+
+	const float animationDelta;
 };
