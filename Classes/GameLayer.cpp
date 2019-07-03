@@ -1,7 +1,7 @@
 #include "GameLayer.h"
 #include "Player.h"
 #include "MapManager.h"
-
+#include"PauseScene.h"
 using namespace cocos2d;
 
 bool GameLayer::init() {
@@ -48,7 +48,7 @@ bool GameLayer::init() {
 
 	//add keyboard call back function
 	auto klistener = EventListenerKeyboard::create();
-	klistener->onKeyPressed = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) noexcept {
+	klistener->onKeyPressed = [player,this](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) noexcept {
 		switch (code)
 		{
 		case cocos2d::EventKeyboard::KeyCode::KEY_A:
@@ -67,6 +67,16 @@ bool GameLayer::init() {
 			player->setDirection(Unit::Direction::Up);
 			player->move(Unit::Status::Stand);
 			break;
+		case cocos2d::EventKeyboard::KeyCode::KEY_ESCAPE:
+			RenderTexture *renderTexture = RenderTexture::create(1024, 768);
+			renderTexture->begin();
+			this->getParent()->visit();
+			renderTexture->end();
+			//将游戏界面暂停，压入场景堆栈。并切换到GamePause界面
+			Director::sharedDirector()->pushScene((Scene*)renderTexture);
+			Scene *scene = PauseScene::createScene();
+			Director::getInstance()->replaceScene(scene); 
+			break;
 		}
 	};
 
@@ -78,6 +88,8 @@ bool GameLayer::init() {
 	return true;
 }
 
+
 void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 	CCLOG("%s <-> %s\n", node1->getName().c_str(), node2->getName().c_str());
+
 }

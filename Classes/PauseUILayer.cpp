@@ -11,7 +11,7 @@ bool PauseUILayer::init() {
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
 	//background
-	auto backgound = Sprite::create("pause/back.png");
+	auto backgound = Sprite::create("Game/back.png");
 	//backgound->setScale(2,2);
 	backgound->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height / 2));
 	this->addChild(backgound, 0);
@@ -36,9 +36,17 @@ bool PauseUILayer::init() {
 		sprite_->setPosition(origin.x + visibleSize.width*offset, origin.y + visibleSize.height*0.5f);
 		this->addChild(sprite_);
 		offset += 0.1f;
-	}
-
-
+	}	
+	auto klistener_ = EventListenerKeyboard::create();
+	klistener_->onKeyPressed = [](cocos2d::EventKeyboard::KeyCode code_, cocos2d::Event* event) {
+		if (code_ == EventKeyboard::KeyCode::KEY_ESCAPE) {
+			Director::sharedDirector()->popScene();
+		}
+	};
+	klistener_->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code_, cocos2d::Event* event) {
+	};
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(klistener_, this);
+	
 	return true;
 }
 
