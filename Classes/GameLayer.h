@@ -14,8 +14,14 @@ public:
 	}
 
 	void onContactBegin(cocos2d::Node*, cocos2d::Node*);
+	void onContactEnd(cocos2d::Node*, cocos2d::Node*);
+
+	void interact();
 
 private:
 	cocos2d::PhysicsWorld* theWorld;
+	bool isInteractable;
+
+	const int interactingFlag = 3154;
 };
 

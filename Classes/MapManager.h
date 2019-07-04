@@ -1,5 +1,9 @@
 #pragma once
+#include <vector>
+#include <set>
 #include "cocos2d.h"
+
+typedef std::pair<cocos2d::Vec2, cocos2d::Vec2> VecPair;
 
 class MapManager :
 	public cocos2d::Node
@@ -18,9 +22,12 @@ public:
 		return this->getObjectPosition("boss");
 	}
 
+	std::vector<VecPair> getEnemyPosition();
+
 private:
 	void setPhysicsBoxes();
-	void addByType(const std::string&);
+	void addNodeByType(const std::string&);
+	void addSpriteByType(const std::string&, const std::string&);
 	cocos2d::Vec2 getObjectPosition(const std::string&);
 };
 
