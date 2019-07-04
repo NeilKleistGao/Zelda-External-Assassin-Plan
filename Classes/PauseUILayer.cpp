@@ -11,7 +11,7 @@ bool PauseUILayer::init() {
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
 	//background
-	auto backgound = Sprite::create("Game/back.png");
+	auto backgound = Sprite::create("pause/back.png");
 	//backgound->setScale(2,2);
 	backgound->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height / 2));
 	this->addChild(backgound, 0);
@@ -20,12 +20,13 @@ bool PauseUILayer::init() {
 	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height*0.9f);
 	this->addChild(label, 1, "pause");
 
-	auto sprite1 = Sprite::create("Game/P1.png");
-	sprite1->setScale(0.8, 0.8);
+	auto sprite1 = Sprite::create("pause/bullet.png");
+	sprite1->setScale(0.2, 0.2);
 	sprite1->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.95f);
 	this->addChild(sprite1);
 
-	auto sprite2 = Sprite::create("Game/Blood.png");
+	auto sprite2 = Sprite::create("pause/Blood.png");
+	sprite2->setScale(2.5, 2.5);
 	sprite2->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.85f);
 	this->addChild(sprite2);
 
