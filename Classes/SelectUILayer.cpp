@@ -17,7 +17,6 @@ bool SelectUILayer::init() {
 	this->addChild(label, 1,"word");
 
 	Process *p= Process::getInstance();
-	Sprite *sprite1, *sprite2, *sprite3, *sprite4, *sprite5;
 	int a = p->FileGet();
 
     float offset = 0.1f;

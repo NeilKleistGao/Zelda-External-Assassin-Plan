@@ -43,9 +43,9 @@ void MapManager::setPhysicsBoxes() {
 	this->addByType("mov");
 }
 
-cocos2d::Vec2 MapManager::getPlayerPosition() {
+cocos2d::Vec2 MapManager::getObjectPosition(const std::string& objName) {
 	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
-	auto posObject = map->getObjectGroup("player")->getObjects().at(0).asValueMap();
+	auto posObject = map->getObjectGroup(objName)->getObjects().at(0).asValueMap();
 	return Vec2(posObject.at("x").asFloat(), posObject.at("y").asFloat());
 }
 

@@ -10,10 +10,17 @@ public:
 
 	size_t getTileSize();
 
-	cocos2d::Vec2 getPlayerPosition();
+	inline cocos2d::Vec2 getPlayerPosition() {
+		return this->getObjectPosition("player");
+	}
+
+	inline cocos2d::Vec2 getBossPosition() {
+		return this->getObjectPosition("boss");
+	}
 
 private:
 	void setPhysicsBoxes();
 	void addByType(const std::string&);
+	cocos2d::Vec2 getObjectPosition(const std::string&);
 };
 

@@ -72,8 +72,8 @@ bool GameLayer::init() {
 			renderTexture->begin();
 			this->getParent()->visit();
 			renderTexture->end();
-			//将游戏界面暂停，压入场景堆栈。并切换到GamePause界面
-			Director::sharedDirector()->pushScene((Scene*)renderTexture);
+			//pause game
+			Director::getInstance()->pushScene((Scene*)renderTexture);
 			Scene *scene = PauseScene::createScene();
 			Director::getInstance()->replaceScene(scene); 
 			break;

@@ -24,6 +24,7 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "AniamtionLoader.h"
 #include "GameScene.h" //test only
 
 // #define USE_AUDIO_ENGINE 1
@@ -155,13 +156,5 @@ void AppDelegate::applicationWillEnterForeground() {
 }
 
 void AppDelegate::preload() {
-	auto cache = SpriteFrameCache::getInstance();
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerDown0.png", Rect(0, 0, 14, 16)), "playerDown0");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerDown1.png", Rect(0, 0, 14, 16)), "playerDown1");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerUp0.png", Rect(0, 0, 14, 16)), "playerUp0");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerUp1.png", Rect(0, 0, 14, 16)), "playerUp1");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerLeft0.png", Rect(0, 0, 14, 16)), "playerLeft0");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerLeft1.png", Rect(0, 0, 14, 16)), "playerLeft1");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerRight0.png", Rect(0, 0, 14, 16)), "playerRight0");
-	cache->addSpriteFrame(SpriteFrame::create("Game/playerRight1.png", Rect(0, 0, 14, 16)), "playerRight1");
+	AniamtionLoader::loadAniamtion("Game/player.alist");
 }
