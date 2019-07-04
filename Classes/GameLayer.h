@@ -17,10 +17,11 @@ public:
 	void onContactEnd(cocos2d::Node*, cocos2d::Node*);
 
 	void interact();
+	void push();
 
 private:
 	cocos2d::PhysicsWorld* theWorld;
-	bool isInteractable;
+	bool isInteractable, isMovable, isPushable;
 
 	const int interactingFlag = 3154;
 };

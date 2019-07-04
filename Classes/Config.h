@@ -26,16 +26,23 @@ struct objectData {
 	}
 };
 
- class Config
+class Config
 {
 public:
-	
-	Config() = default;
-	~Config() = default;
+	static Config* getInstance();
+
 	void loadConfig(std::string filename);
-	 std::map<std::string, enemyData>EnemyData;
-	 std::map<std::string, objectData>ObjectData;
+	 
 	enemyData getEnemy(const std::string &Name);
 	objectData getObject(const std::string &Name);
+
+private:
+	static Config* conf;
+
+	std::map<std::string, enemyData>EnemyData;
+	std::map<std::string, objectData>ObjectData;
+
+	Config() = default;
+	~Config() = default;
 };
 

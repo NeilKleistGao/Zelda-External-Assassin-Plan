@@ -25,6 +25,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "AniamtionLoader.h"
+#include "Config.h"
 #include "GameScene.h" //test only
 
 // #define USE_AUDIO_ENGINE 1
@@ -156,5 +157,7 @@ void AppDelegate::applicationWillEnterForeground() {
 }
 
 void AppDelegate::preload() {
+	Config::getInstance()->loadConfig("config/enemy.csv");
+	Config::getInstance()->loadConfig("config/objects.csv");
 	AniamtionLoader::loadAniamtion("Game/player.alist");
 }

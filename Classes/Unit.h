@@ -35,16 +35,20 @@ public:
 
 	virtual void update(float);
 
+	inline Direction getDirection() const {
+		return direction;
+	}
+
 protected:
 	std::map<std::string, int> frameCount;
 	Direction direction;
 	Status status;
-	int HP, damage;
+	int HP, damage, animationIndex;
 	float speed;
 
 private:
 	std::string frameName;
-	int animationIndex;
+	
 	bool isMoving;
 	float timer;
 

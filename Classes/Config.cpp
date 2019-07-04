@@ -4,6 +4,17 @@
 #include <sstream>
 #include<map>
 #include<vector>
+
+Config* Config::conf = nullptr;
+
+Config* Config::getInstance() {
+	if (!conf) {
+		conf = new(std::nothrow) Config();
+	}
+
+	return conf;
+}
+
 void Config::loadConfig(std::string filename) {
 	if (filename == "config/enemy.csv") {
 		std::fstream EnemyFile(filename);

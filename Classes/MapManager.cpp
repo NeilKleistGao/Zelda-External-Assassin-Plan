@@ -41,6 +41,7 @@ size_t MapManager::getTileSize() {
 void MapManager::setPhysicsBoxes() {
 	this->addNodeByType("obs");
 	this->addNodeByType("mov");
+	this->addNodeByType("door");
 	this->addSpriteByType("box", "Game/boxClose.png");
 }
 
@@ -135,4 +136,18 @@ std::vector<VecPair> MapManager::getEnemyPosition() {
 	}
 
 	return res;
+}
+
+bool MapManager::isWater(const cocos2d::Vec2&) {
+	//TODO:
+	return false;
+}
+
+bool MapManager::isHole(const cocos2d::Vec2&) {
+	//TODO:
+	return false;
+}
+
+void MapManager::change() {
+	//TODO:
 }

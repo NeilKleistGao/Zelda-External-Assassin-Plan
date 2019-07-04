@@ -22,6 +22,11 @@ public:
 		return this->getObjectPosition("boss");
 	}
 
+	bool isWater(const cocos2d::Vec2&);
+	bool isHole(const cocos2d::Vec2&);
+
+	void change();
+
 	std::vector<VecPair> getEnemyPosition();
 
 private:
@@ -29,5 +34,7 @@ private:
 	void addNodeByType(const std::string&);
 	void addSpriteByType(const std::string&, const std::string&);
 	cocos2d::Vec2 getObjectPosition(const std::string&);
+
+	cocos2d::Vec2 offset;
 };
 
