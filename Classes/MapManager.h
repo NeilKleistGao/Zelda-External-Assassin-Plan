@@ -22,10 +22,21 @@ public:
 		return this->getObjectPosition("boss");
 	}
 
-	bool isWater(const cocos2d::Vec2&);
-	bool isHole(const cocos2d::Vec2&);
+	inline bool isWater(const cocos2d::Vec2& v) {
+		return (getGIDAt(v, "water") != 0);
+	}
 
-	void change();
+	inline bool isHole(const cocos2d::Vec2& v) {
+		return (getGIDAt(v, "hole") != 0);
+	}
+
+	inline void setOffset(const cocos2d::Vec2& v) {
+		offset += v;
+	}
+
+	bool isNull(const cocos2d::Vec2&);
+
+	void resetMovableObject(const cocos2d::Vec2&, const cocos2d::Vec2&);
 
 	std::vector<VecPair> getEnemyPosition();
 
@@ -33,7 +44,13 @@ private:
 	void setPhysicsBoxes();
 	void addNodeByType(const std::string&);
 	void addSpriteByType(const std::string&, const std::string&);
+	void addPositionNode(const std::string&);
 	cocos2d::Vec2 getObjectPosition(const std::string&);
+
+	int getGIDAt(const cocos2d::Vec2&, const std::string);
+	void setGIDAt(const cocos2d::Vec2&, const std::string&, const int);
+
+	cocos2d::Vec2 transform(cocos2d::Vec2);
 
 	cocos2d::Vec2 offset;
 };

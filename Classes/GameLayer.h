@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 #include"GameScene.h"
+
 class GameLayer :
 	public cocos2d::Layer
 {
@@ -19,10 +20,12 @@ public:
 	void interact();
 	void push();
 
+	void check(float);
+
 private:
 	cocos2d::PhysicsWorld* theWorld;
-	bool isInteractable, isMovable, isPushable;
+	bool isInteractable, isMovable;
 
-	const int interactingFlag = 3154;
+	const int interactingFlag = 3154, movableFlag = 2517;
 };
 
