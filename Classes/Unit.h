@@ -28,7 +28,7 @@ public:
 		direction = d;
 	}
 	
-	void move(Status);
+	void move(Status=Stand);
 	void stop();
 	virtual bool init();
 	virtual bool initWithFile(const std::string&);
