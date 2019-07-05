@@ -1,4 +1,7 @@
-#include"GameUILayer.h"
+#include <iostream>
+#include "GameUILayer.h"
+#include "MessageBox.h"
+
 using namespace cocos2d;
 
 bool GameUILayer::init() {
@@ -9,18 +12,27 @@ bool GameUILayer::init() {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
-	//background image
+	auto box = InteractionMessageBox::create();
+	box->setPosition(Vec2::ZERO);
+	box->setName("box");
+	this->addChild(box);
 
-	//blink infomation
-
-
-	//add keyboard event
-
-	//add schedule
+	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(GameUILayer::recieveAndShow), "show", nullptr);
+	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(GameUILayer::recieveAndHide), "hide", nullptr);
 
 	return true;
 }
 
-void GameUILayer::update(float dt) {
-	//TODO;
+void GameUILayer::recieveAndShow(Ref* msg) {
+	std::string str = dynamic_cast<String*>(msg)->getCString();
+	auto box = dynamic_cast<InteractionMessageBox*>(this->getChildByName("box"));
+
+	int space = str.find(' ');
+	std::string name = str.substr(0, space), type = str.substr(space + 1);
+	box->show((type == "0"), name);
+}
+
+void GameUILayer::recieveAndHide(Ref*) {
+	auto box = dynamic_cast<InteractionMessageBox*>(this->getChildByName("box"));
+	box->hide();
 }

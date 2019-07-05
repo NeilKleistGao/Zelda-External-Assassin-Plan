@@ -124,6 +124,7 @@ void MapManager::addPositionNode(const std::string& type) {
 			width = obj.at("width").asFloat(), height = obj.at("height").asFloat();
 
 		int dx = obj.at("dx").asInt(), dy = obj.at("dy").asInt();
+		int newx = obj.at("newx").asInt(), newy = obj.at("newy").asInt();
 
 		auto node = Node::create();
 		auto body = PhysicsBody::createBox(Size(width, height));
@@ -132,7 +133,7 @@ void MapManager::addPositionNode(const std::string& type) {
 		node->setPosition(x + width / 2, y + height / 2);
 		node->setPhysicsBody(body);
 		node->setName(type);
-		node->setUserData(new Vec2(dx, dy));
+		node->setUserData(new std::pair<Vec2, Vec2>(Vec2(dx, dy), Vec2(newx, newy)));
 
 		this->addChild(node);
 	}
@@ -189,9 +190,6 @@ Vec2 MapManager::transform(Vec2 v) {
 	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
 	size_t size = getTileSize(), height = map->getMapSize().height;
 
-	v.x -= offset.x;
-	v.y -= offset.y;
-
 	return Vec2((int)(v.x / size), (int)(height - v.y / size));
 }
 
@@ -202,6 +200,8 @@ bool MapManager::isNull(const Vec2& v) {
 	sum += getGIDAt(v, "hole");
 	sum += getGIDAt(v, "water");
 	sum += getGIDAt(v, "obs");
+	sum += getGIDAt(v, "mov");
+	sum += getGIDAt(v, "box");
 
 	return (sum == 0);
 }

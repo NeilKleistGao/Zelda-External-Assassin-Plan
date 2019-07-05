@@ -8,5 +8,6 @@ public:
 	virtual bool init();
 	CREATE_FUNC(GameUILayer);
 
-	void update(float);
+	void recieveAndShow(cocos2d::Ref*);
+	void recieveAndHide(cocos2d::Ref*);
 };

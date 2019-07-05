@@ -23,46 +23,36 @@ bool InteractionMessageBox::init() {
 }
 
 
-
-
-void InteractionMessageBox::show(int y,const std::string& name) {
+void InteractionMessageBox::show(bool isLow,const std::string& name) {
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
-	if (y < origin.y+visibleSize.height/2) {
-		Node* box = Node::getChildByName("box");
-		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.875f);
-		box->setVisible(true);
+	auto box = Node::getChildByName("box");
 
-		auto label = dynamic_cast<Label*>(this->getChildByName("congratulations"));
-		std::string s = Config::getInstance()->getObject(name).info_text;
-		for (int i = 0; i < sizeof(s);i++) {
-			if (i == 16) {
-				s = s.insert(i, "\n");
-			}
-        }
-		label->setString(s);
-		label->setPosition(origin.x + visibleSize.width*0.41f, origin.y + visibleSize.height*0.97f);
-		label->setVisible(true);
-
-	}
-	else if (y > origin.y + visibleSize.height / 2) {
-		Node* box_ = Node::getChildByName("box");
-		box_->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.125f);
-		box_->setVisible(true);
-		
-		auto label_ = dynamic_cast<Label*>(this->getChildByName("congratulations"));
-		std::string s_ = Config::getInstance()->getObject(name).info_text;
-		for (int i = 0; i < sizeof(s_); i++) {
-			if (i == 16) {
-				s_ = s_.insert(i, "\n");
-			}
+	auto label = dynamic_cast<Label*>(this->getChildByName("congratulations"));
+	std::string s = Config::getInstance()->getObject(name).info_text;
+	for (int i = 0; i < sizeof(s); i++) {
+		if (i == 16) {
+			s = s.insert(i, "\n");
 		}
-		label_->setString(s_);
-		label_->setPosition(origin.x + visibleSize.width*0.41f, origin.y + visibleSize.height*0.225f);
-		label_->setVisible(true);
 	}
+
+	label->setString(s);
+	label->setAnchorPoint(Vec2::ZERO);
+
+	if (isLow) {
+		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.875f);
+		label->setPosition(origin.x + visibleSize.width*0.41f, origin.y + visibleSize.height*0.97f);
+	}
+	else {
+		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.125f);
+		label->setPosition(origin.x + visibleSize.width*0.41f, origin.y + visibleSize.height*0.225f);
+		
+	}
+
+	box->setVisible(true);
+	label->setVisible(true);
 }
 
 void InteractionMessageBox::hide() {

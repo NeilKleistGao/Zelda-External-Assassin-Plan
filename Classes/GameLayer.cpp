@@ -27,24 +27,18 @@ bool GameLayer::init() {
 	map->setName("map");
 	this->addChild(map, 0);
 
-	//add physics box
-	/*auto edge = PhysicsBody::createEdgeBox(
-		Size(visibleSize.width - map->getTileSize() * 2, visibleSize.height - map->getTileSize() * 2));
-	edge->setContactTestBitmask(1);
-	edge->setDynamic(false);
-
-	auto node = Node::create();
-	node->setPosition(origion.x + visibleSize.width / 2, origion.y + visibleSize.height / 2);
-	node->setPhysicsBody(edge);
-	node->setName("edge");
-	this->addChild(node);*/
-
 	//add player
 	auto player = Player::create("Game/playerDown0.png");
 	player->setName("player");
-	player->setScale(4, 4);
+	player->setScale(3.5, 3.5);
 	player->setPosition(map->getPlayerPosition());
 	this->addChild(player, 1);
+
+	auto shadow = Sprite::create("Game/shadow.png");
+	shadow->setPosition(Vec2(origion.x + visibleSize.width / 2, origion.y + visibleSize.height / 2));
+	shadow->setName("shadow");
+	shadow->setOpacity(0);
+	this->addChild(shadow, 20);
 
 	//add contact call back function
 	auto plistener = EventListenerPhysicsContact::create();
@@ -113,7 +107,7 @@ bool GameLayer::init() {
 		}
 	};
 
-	klistener->onKeyReleased = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) noexcept {
+	klistener->onKeyReleased = [player](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
 		if (code == EventKeyboard::KeyCode::KEY_A || code == EventKeyboard::KeyCode::KEY_D
 			|| code == EventKeyboard::KeyCode::KEY_S || code == EventKeyboard::KeyCode::KEY_W) {
 			player->stop();
@@ -149,29 +143,41 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		//TODO:
 	}
 	else if (node1->getName() == "player" && node2->getName() == "trans") {
-		auto pos = *static_cast<Vec2*>(node2->getUserData());
+		auto pos = static_cast<std::pair<Vec2, Vec2>*>(node2->getUserData());
+		auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+		player->setUserData(pos);
+
+		this->schedule(schedule_selector(GameLayer::turnOff));
+	}
+}
+
+void GameLayer::turnOff(float) {
+	auto shadow = dynamic_cast<Sprite*>(this->getChildByName("shadow"));
+	shadow->setOpacity(shadow->getOpacity() + 5);
+
+	if (shadow->getOpacity() == 255) {
+		auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+		auto pos = static_cast<std::pair<Vec2, Vec2>*>(player->getUserData());
+		auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 		
 
-		if (pos.x != 0 && pos.y != 0) {
-			auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
-			//TODO:
-		}
-		else {
-			auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
-			auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+		map->setPosition(map->getPositionX() + pos->first.x, map->getPositionY() + pos->first.y);
+		map->setOffset(pos->first);
+		player->setPosition(pos->second);
 
-			map->setPosition(map->getPositionX() + pos.x, map->getPositionY() + pos.y);
-			map->setOffset(pos);
+		this->schedule(schedule_selector(GameLayer::turnOff));
 
-			if (pos.x == 0) {
-				float temp = pos.y / abs(pos.y);
-				player->setPositionY(player->getPositionY() + map->getTileSize() * 10 * temp);
-			}
-			else {
-				float temp = pos.x / abs(pos.x);
-				player->setPositionX(player->getPositionX() - map->getTileSize() * 14 * temp);
-			}
-		}
+		this->unschedule(schedule_selector(GameLayer::turnOff));
+		this->schedule(schedule_selector(GameLayer::turnOn));
+	}
+}
+
+void GameLayer::turnOn(float) {
+	auto shadow = dynamic_cast<Sprite*>(this->getChildByName("shadow"));
+	shadow->setOpacity(shadow->getOpacity() - 5);
+
+	if (shadow->getOpacity() == 0) {
+		this->unschedule(schedule_selector(GameLayer::turnOn));
 	}
 }
 
@@ -184,6 +190,9 @@ void GameLayer::onContactEnd(cocos2d::Node* node1, cocos2d::Node* node2){
 		node2->setTag(0);
 		this->isInteractable = false;
 	}
+	else if (node1->getName() == "player" && node2->getName() == "mov") {
+		node2->setTag(0);
+	}
 	else if (node1->getName() == "player" && node2->getName() == "enemy") {
 		//TODO:
 	}
@@ -194,23 +203,33 @@ void GameLayer::interact() {
 		return;
 	}
 	
-	auto map = this->getChildByName("map");
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 	auto box = dynamic_cast<Sprite*>(map->getChildByTag(this->interactingFlag));
+	auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+
 	box->setSpriteFrame(SpriteFrame::create("Game/boxOpen.png", Rect(0, 0, 64, 64)));
 
 	std::string content = *static_cast<std::string*>(box->getUserData());
+	auto offset = map->getOffset();
 
 	if (content != "") {
 		this->isMovable = false;
 
+		std::string temp = content;
+		temp += (player->getPositionY() >= visibleSize.height / 2) ? " 1024" : " 0";
+
+		auto msg = String::createWithData((const unsigned char*)(temp.c_str()), temp.length());
+		msg->retain();
+		NotificationCenter::getInstance()->postNotification("show", msg);
+
 		auto data = Config::getInstance()->getObject(content);
 		auto pic = Sprite::create(data.image_path);
 		pic->setScale(3, 3);
-		pic->setPosition(box->getPositionX(), box->getPositionY() + pic->getBoundingBox().size.height / 2);
+		pic->setPosition(box->getPositionX() + offset.x, box->getPositionY() + offset.y + pic->getBoundingBox().size.height / 2);
 		pic->setName("temp");
 		this->addChild(pic, 1);
-
-		auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+		
 		player->addCollection(content);
 
 		content = "";
@@ -221,6 +240,7 @@ void GameLayer::interact() {
 		if (pic) {
 			this->removeChild(pic, true);
 			this->isMovable = true;
+			NotificationCenter::getInstance()->postNotification("hide");
 		}
 	}
 }
@@ -230,24 +250,23 @@ void GameLayer::push() {
 	auto player = dynamic_cast<Player*>(this->getChildByName("player"));
 	auto mov = map->getChildByTag(movableFlag);
 	
-
 	bool flag = false;
-	Vec2 next = mov->getPosition();
+	Vec2 next = mov->getPosition(), offset = map->getOffset();
 	switch(player->getDirection()) {
 	case Unit::Direction::Up:
-		flag = (player->getPositionY() < mov->getPositionY() && abs(player->getPositionX() - mov->getPositionX()) <= map->getTileSize() / 2);
+		flag = (player->getPositionY() - offset.y < mov->getPositionY() && abs(player->getPositionX() - offset.x - mov->getPositionX()) <= map->getTileSize() / 2);
 		next.y += map->getTileSize();
 		break;
 	case Unit::Direction::Down:
-		flag = (player->getPositionY() > mov->getPositionY() && abs(player->getPositionX() - mov->getPositionX()) <= map->getTileSize() / 2);
+		flag = (player->getPositionY() - offset.y > mov->getPositionY() && abs(player->getPositionX() - offset.x - mov->getPositionX()) <= map->getTileSize() / 2);
 		next.y -= map->getTileSize();
 		break;
 	case Unit::Direction::Left:
-		flag = (player->getPositionX() > mov->getPositionX() && abs(player->getPositionY() - mov->getPositionY()) <= map->getTileSize() / 2);
+		flag = (player->getPositionX() - offset.x > mov->getPositionX() && abs(player->getPositionY() - offset.y - mov->getPositionY()) <= map->getTileSize() / 2);
 		next.x -= map->getTileSize();
 		break;
 	case Unit::Direction::Right:
-		flag = (player->getPositionX() < mov->getPositionX() && abs(player->getPositionY() - mov->getPositionY()) <= map->getTileSize() / 2);
+		flag = (player->getPositionX() - offset.x < mov->getPositionX() && abs(player->getPositionY() - offset.y - mov->getPositionY()) <= map->getTileSize() / 2);
 		next.x += map->getTileSize();
 		break;
 	}
@@ -255,7 +274,7 @@ void GameLayer::push() {
 	if (flag && map->isNull(next)) {
 		map->resetMovableObject(mov->getPosition(), next);
 		mov->setPosition(next);
-		mov->setTag(0);
+		//mov->setTag(0);
 	}
 }
 

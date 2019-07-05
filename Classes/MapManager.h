@@ -34,7 +34,16 @@ public:
 		offset += v;
 	}
 
+	inline cocos2d::Vec2 getOffset() {
+		return offset;
+	}
+
 	bool isNull(const cocos2d::Vec2&);
+
+	inline void setPhysicsDebugMode(bool mode) {
+		auto map = this->getChildByName("map");
+		map->setVisible(!mode);
+	}
 
 	void resetMovableObject(const cocos2d::Vec2&, const cocos2d::Vec2&);
 

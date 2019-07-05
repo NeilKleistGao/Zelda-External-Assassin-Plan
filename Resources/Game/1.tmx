@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="16" height="36" tilewidth="64" tileheight="64" infinite="0" nextlayerid="19" nextobjectid="61">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="16" height="36" tilewidth="64" tileheight="64" infinite="0" nextlayerid="24" nextobjectid="98">
  <tileset firstgid="1" source="1.tsx"/>
+ <layer id="23" name="box" width="16" height="36">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,5,0,0,0,0,0,0,0,0,0,0,0,0,5,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
  <layer id="2" name="back" width="16" height="36">
   <data encoding="csv">
 5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,
@@ -243,6 +283,7 @@
  </layer>
  <layer id="17" name="water" width="16" height="36">
   <data encoding="csv">
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -253,6 +294,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -263,6 +306,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -273,16 +318,49 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5
 </data>
  </layer>
- <objectgroup id="18" name="door">
-  <object id="60" x="447" y="833" width="65" height="31"/>
+ <objectgroup id="22" name="trans">
+  <object id="94" x="448" y="737" width="63" height="27">
+   <properties>
+    <property name="dx" type="int" value="0"/>
+    <property name="dy" type="int" value="768"/>
+    <property name="newx" type="int" value="512"/>
+    <property name="newy" type="int" value="660"/>
+   </properties>
+  </object>
+  <object id="95" x="447" y="765" width="64" height="28">
+   <properties>
+    <property name="dx" type="int" value="0"/>
+    <property name="dy" type="int" value="-768"/>
+    <property name="newx" type="int" value="512"/>
+    <property name="newy" type="int" value="130"/>
+   </properties>
+  </object>
+  <object id="96" x="448" y="1509" width="64" height="26">
+   <properties>
+    <property name="dx" type="int" value="0"/>
+    <property name="dy" type="int" value="768"/>
+    <property name="newx" type="int" value="512"/>
+    <property name="newy" type="int" value="660"/>
+   </properties>
+  </object>
+  <object id="97" x="446" y="1535" width="66" height="27">
+   <properties>
+    <property name="dx" type="int" value="0"/>
+    <property name="dy" type="int" value="-768"/>
+    <property name="newx" type="int" value="512"/>
+    <property name="newy" type="int" value="130"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="18" name="door" visible="0">
+  <object id="76" x="449" y="767" width="62" height="61">
+   <properties>
+    <property name="require" value="key1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="9" name="obs">
   <object id="2" x="384" y="1856" width="64" height="62.6667"/>
@@ -309,6 +387,18 @@
   <object id="29" x="62.6667" y="64" width="65.3333" height="65.3333"/>
   <object id="30" x="894.667" y="64" width="65.3333" height="62.6667"/>
   <object id="31" x="897.333" y="1600" width="61.3333" height="62.6667"/>
+  <object id="70" x="67" y="1474" width="381" height="123"/>
+  <object id="71" x="511" y="1470" width="446" height="130"/>
+  <object id="72" x="-1" y="1599" width="65" height="636"/>
+  <object id="73" x="960" y="1601" width="64" height="636"/>
+  <object id="75" x="62" y="2241" width="898" height="61"/>
+  <object id="77" x="-1" y="831" width="63" height="639"/>
+  <object id="78" x="961" y="832" width="62" height="636"/>
+  <object id="79" x="62" y="703" width="387" height="126"/>
+  <object id="80" x="512" y="702" width="447" height="130"/>
+  <object id="81" x="0" y="63" width="62" height="642"/>
+  <object id="82" x="960" y="63" width="63" height="640"/>
+  <object id="83" x="65" y="1" width="893" height="61"/>
  </objectgroup>
  <layer id="8" name="mov" width="16" height="36">
   <data encoding="csv">
@@ -373,13 +463,13 @@
   </object>
  </objectgroup>
  <objectgroup id="16" name="enm">
-  <object id="56" x="413" y="489">
+  <object id="56" x="413" y="490">
    <properties>
     <property name="index" type="int" value="0"/>
    </properties>
    <point/>
   </object>
-  <object id="57" x="546" y="491">
+  <object id="57" x="546" y="490">
    <properties>
     <property name="index" type="int" value="0"/>
    </properties>

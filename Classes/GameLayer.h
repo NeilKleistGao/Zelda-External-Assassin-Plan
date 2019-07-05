@@ -21,6 +21,8 @@ public:
 	void push();
 
 	void check(float);
+	void turnOff(float);
+	void turnOn(float);
 
 private:
 	cocos2d::PhysicsWorld* theWorld;
