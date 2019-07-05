@@ -24,7 +24,12 @@ public:
 	inline std::set<std::string> getAllCollection() const {
 		return collection;
 	}
-
+	inline int  getBullet()const {
+		return bulletCount;
+	}
+	inline int getHp()const {
+		return this->HP;
+	}
 private:
 	std::set<std::string> collection;
 	int bulletCount;

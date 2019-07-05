@@ -27,7 +27,7 @@
 #include "AniamtionLoader.h"
 #include "Config.h"
 #include "GameScene.h" //test only
-
+#include"GameVictoryScene.h"//test only
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -123,7 +123,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	preload();
 
     // create a scene. it's an autorelease object
-    //auto scene = HelloWorld::createScene();
+
 
 	auto sceneMain = GameScene::createScene();// test only
     // run
