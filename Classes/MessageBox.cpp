@@ -43,11 +43,11 @@ void InteractionMessageBox::show(bool isLow,const std::string& name) {
 
 	if (isLow) {
 		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.875f);
-		label->setPosition(origin.x + visibleSize.width*0.41f, origin.y + visibleSize.height*0.97f);
+		label->setPosition(origin.x + visibleSize.width*0.305f, origin.y + visibleSize.height*0.95f);
 	}
 	else {
 		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.125f);
-		label->setPosition(origin.x + visibleSize.width*0.41f, origin.y + visibleSize.height*0.225f);
+		label->setPosition(origin.x + visibleSize.width*0.305f, origin.y + visibleSize.height*0.195f);
 		
 	}
 
