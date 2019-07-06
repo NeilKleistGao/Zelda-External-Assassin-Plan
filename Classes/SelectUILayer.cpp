@@ -1,10 +1,12 @@
 #include <algorithm>
 
-#include"SelectUILayer.h"
-#include"GameProcess.h"
+#include "SelectUILayer.h"
+#include "GameProcess.h"
 #include "GameScene.h"
+#include "audio/include/AudioEngine.h"
 
 using namespace cocos2d;
+using namespace experimental;
 
 bool SelectUILayer::init() {
 	if (!Layer::init()) {
@@ -18,7 +20,7 @@ bool SelectUILayer::init() {
 	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height*0.8f);
 	this->addChild(label, 1,"word");
 
-	Process *p= Process::getInstance();
+	Process *p = Process::getInstance();
 	int a = p->FileGet();
 
     float offset = 0.1f;
@@ -46,13 +48,13 @@ bool SelectUILayer::init() {
 	
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
-
 		Process *q = Process::getInstance();
 		int rec = q->FileGet();
 		int sel = static_cast<int>(code) - static_cast<int>(EventKeyboard::KeyCode::KEY_1);
 
 		if (sel <= rec) {
 			Director::getInstance()->replaceScene(TransitionFade::create(1.0f, GameScene::createScene(sel + 1)));
+			AudioEngine::stopAll();
 		}
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);

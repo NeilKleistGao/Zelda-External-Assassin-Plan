@@ -12,8 +12,10 @@
 #include "GameVictoryScene.h"
 #include "GameProcess.h"
 #include "PauseUILayer.h"
+#include "audio/include/AudioEngine.h"
 
 using namespace cocos2d;
+using namespace experimental;
 
 GameLayer* GameLayer::create(int level) {
 	auto layer = new(std::nothrow) GameLayer();
@@ -41,6 +43,8 @@ bool GameLayer::init(int level) {
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origion = Director::getInstance()->getVisibleOrigin();
+
+	AudioEngine::play2d("music/" + std::to_string(level) + ".mp3");
 
 	//add map
 	auto map = MapManager::create(level);

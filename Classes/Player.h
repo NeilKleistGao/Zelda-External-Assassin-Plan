@@ -46,7 +46,7 @@ public:
 	}
 
 	inline bool checkBulletReady() {
-		return (bulletCount > 0);
+		return (getBullet() > 0);
 	}
 
 	inline void fire() {
