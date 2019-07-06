@@ -30,6 +30,9 @@
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
+#include "audio/include/AudioEngine.h"
+using namespace cocos2d::experimental;
+
 #if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
 #error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
 #endif
@@ -149,4 +152,16 @@ void AppDelegate::preload() {
 	AnimationLoader::loadAniamtion("Game/playerSwim.alist");
 	AnimationLoader::loadAniamtion("enemy/enemy1.alist");
 	AnimationLoader::loadAniamtion("enemy/enemy2.alist");
+
+	AudioEngine::preload("music/begin.mp3");
+	AudioEngine::preload("music/select.mp3");
+	AudioEngine::preload("music/1.mp3");
+	AudioEngine::preload("music/2.mp3");
+	AudioEngine::preload("music/3.mp3");
+	AudioEngine::preload("music/4.mp3");
+	AudioEngine::preload("music/5.mp3");
+	AudioEngine::preload("music/get.mp3");
+	AudioEngine::preload("music/open.mp3");
+	AudioEngine::preload("music/hurt.mp3");
+	AudioEngine::preload("music/fire.mp3");
 }

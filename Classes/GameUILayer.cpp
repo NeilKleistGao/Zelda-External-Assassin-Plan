@@ -36,3 +36,8 @@ void GameUILayer::recieveAndHide(Ref*) {
 	auto box = dynamic_cast<InteractionMessageBox*>(this->getChildByName("box"));
 	box->hide();
 }
+
+void GameUILayer::onExit() {
+	NotificationCenter::getInstance()->removeAllObservers(this);
+	Layer::onExit();
+}

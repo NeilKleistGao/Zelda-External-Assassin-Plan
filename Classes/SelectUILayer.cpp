@@ -16,6 +16,9 @@ bool SelectUILayer::init() {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
+	AudioEngine::stopAll();
+	AudioEngine::play2d("music/select.mp3", true);
+
 	auto label = Label::createWithTTF("Please choose one checkpoint", "fonts/sans.ttf", 30);
 	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height*0.8f);
 	this->addChild(label, 1,"word");
@@ -52,9 +55,8 @@ bool SelectUILayer::init() {
 		int rec = q->FileGet();
 		int sel = static_cast<int>(code) - static_cast<int>(EventKeyboard::KeyCode::KEY_1);
 
-		if (sel <= rec) {
+		if (sel <= rec && sel >= 0) {
 			Director::getInstance()->replaceScene(TransitionFade::create(1.0f, GameScene::createScene(sel + 1)));
-			AudioEngine::stopAll();
 		}
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);

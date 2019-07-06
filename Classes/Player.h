@@ -55,12 +55,9 @@ public:
 
 	virtual int getDamage();
 
-	inline void setProtection() {
-		this->isProtected = true;
-		this->scheduleOnce(schedule_selector(Player::cancelProtection), 1.0f);
+	inline void setProtection(bool st) {
+		this->isProtected = st;
 	}
-
-	void cancelProtection(float);
 
 	virtual bool hurt(int);
 

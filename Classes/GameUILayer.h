@@ -10,4 +10,6 @@ public:
 
 	void recieveAndShow(cocos2d::Ref*);
 	void recieveAndHide(cocos2d::Ref*);
+
+	virtual void onExit();
 };

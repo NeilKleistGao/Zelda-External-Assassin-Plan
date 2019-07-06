@@ -1,4 +1,8 @@
 #include "Player.h"
+#include "audio/include/AudioEngine.h"
+
+using namespace cocos2d;
+using namespace experimental;
 
 Player* Player::create() {
 	auto player = new(std::nothrow)Player();
@@ -53,14 +57,12 @@ int Player::getDamage() {
 	return this->damage;
 }
 
-void Player::cancelProtection(float dt) {
-	this->isProtected = false;
-}
-
 bool Player::hurt(int dmg) {
 	if (isProtected) {
 		return false;
 	}
+
+	AudioEngine::play2d("game/hurt.mp3");
 
 	return Unit::hurt(dmg);
 }

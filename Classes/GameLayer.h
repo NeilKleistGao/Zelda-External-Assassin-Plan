@@ -31,7 +31,10 @@ private:
 	cocos2d::PhysicsWorld* theWorld;
 	bool isInteractable, isMovable, isTransition;
 
-	int currentLevel;
+	int currentLevel, bgmID;
+	int damageTaken;
+
+	float damageTimer;
 
 	const int interactingFlag = 3154, movableFlag = 2517;
 	const cocos2d::Vec2 unavailablePos = cocos2d::Vec2(-99999999, -99999999);

@@ -40,11 +40,13 @@ bool GameLayer::init(int level) {
 	this->isInteractable = false;
 	this->isMovable = true;
 	this->isTransition = false;
+	this->damageTaken = 0;
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origion = Director::getInstance()->getVisibleOrigin();
 
-	AudioEngine::play2d("music/" + std::to_string(level) + ".mp3");
+	AudioEngine::stopAll();
+	bgmID = AudioEngine::play2d("music/" + std::to_string(level) + ".mp3", true, 0.5f);
 
 	//add map
 	auto map = MapManager::create(level);
@@ -196,11 +198,8 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		}
 	}
 	else if (node1->getName() == "player" && node2->getName().substr(0, 5) == "enemy") {
-		auto player = dynamic_cast<Player*>(node1);
 		auto enemy = dynamic_cast<Enemy*>(node2);
-
-		player->hurt(enemy->getDamage());
-		player->setProtection();
+		damageTaken += enemy->getDamage();
 	}
 	else if (node1->getName() == "player" && node2->getName() == "trans") {
 		auto pos = static_cast<std::pair<Vec2, Vec2>*>(node2->getUserData());
@@ -217,6 +216,7 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 			auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 			map->openDoor(node2->getPosition());
 			node2->setPosition(this->unavailablePos);
+			AudioEngine::play2d("game/open.mp3");
 		}
 	}
 	else if (node1->getName() == "player" && node2->getName() == "boss") {
@@ -229,6 +229,8 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		if (node2->getName().substr(0, 5) == "enemy") {
 			auto player = dynamic_cast<Player*>(this->getChildByName("player"));
 			auto enemy = dynamic_cast<Enemy*>(node2);
+
+			AudioEngine::play2d("game/fire.mp3");
 
 			if (enemy->hurt(player->getDamage())) {
 				auto map = this->getChildByName("map");
@@ -293,6 +295,10 @@ void GameLayer::onContactEnd(cocos2d::Node* node1, cocos2d::Node* node2){
 			this->removeChild(node2);
 		}
 	}
+	else if (node1->getName() == "player" && node2->getName().substr(0, 5) == "enemy") {
+		auto enemy = dynamic_cast<Enemy*>(node2);
+		damageTaken -= enemy->getDamage();
+	}
 }
 
 void GameLayer::interact() {
@@ -312,6 +318,9 @@ void GameLayer::interact() {
 
 	if (content != "") {
 		this->isMovable = false;
+
+		AudioEngine::pause(bgmID);
+		AudioEngine::play2d("game/get.mp3", false);
 
 		std::string temp = content;
 		temp += (player->getPositionY() >= visibleSize.height / 2) ? " 1024" : " 0";
@@ -334,6 +343,7 @@ void GameLayer::interact() {
 	}
 	else {
 		auto pic = this->getChildByName("temp");
+		AudioEngine::resume(bgmID);
 		if (pic) {
 			this->removeChild(pic, true);
 			this->isMovable = true;
@@ -416,9 +426,22 @@ void GameLayer::check(float dt) {
 		this->isMovable = true;
 	}
 
-	if (player->hurt(0)) {
+	if (player->hurt(damageTaken)) {
 		this->isMovable = false;
-		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::createScene()));
+		Director::getInstance()->replaceScene(SelectScene::createScene());
+	}
+	else if (damageTimer > 0) {
+		damageTimer -= dt;
+	}
+	else if (damageTaken > 0) {
+		if (damageTimer <= 0.0f) {
+			player->setProtection(true);
+			damageTimer = 1.0f;
+		}
+	}
+
+	if (damageTimer <= 0.0f) {
+		player->setProtection(false);
 	}
 }
 
