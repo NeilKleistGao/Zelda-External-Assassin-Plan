@@ -38,7 +38,29 @@ bool Player::initWithFile(const std::string& filename) {
 	}
 
 	frameCount["playerDown"] = frameCount["playerUp"] = frameCount["playerLeft"] = frameCount["playerRight"] = 2;
+	frameCount["playerSwimDown"] = frameCount["playerSwimUp"] = frameCount["playerSwimLeft"] = frameCount["playerSwimRight"] = 2;
+	frameCount["playerJumpDown"] = frameCount["playerJumpUp"] = frameCount["playerJumpLeft"] = frameCount["playerJumpRight"] = 3;
 	status = Status::Stand;
 
 	return true;
+}
+
+int Player::getDamage() {
+	if (this->hasCollection("doubleDamage")) {
+		return this->damage * 2;
+	}
+	
+	return this->damage;
+}
+
+void Player::cancelProtection(float dt) {
+	this->isProtected = false;
+}
+
+bool Player::hurt(int dmg) {
+	if (isProtected) {
+		return false;
+	}
+
+	return Unit::hurt(dmg);
 }

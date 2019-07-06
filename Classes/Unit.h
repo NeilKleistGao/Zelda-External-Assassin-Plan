@@ -20,15 +20,15 @@ public:
 		Jump
 	};
 
-	Unit() : HP(4), speed(100.0f), damage(5), animationDelta(0.2f) {
+	Unit() : HP(4), speed(150.0f), damage(5), animationDelta(0.2f) {
 	}
 
 	inline void setDirection(const Direction& d) {
 		animationIndex = (direction == d) ? animationIndex : 0;
 		direction = d;
 	}
-	
-	void move(Status=Stand);
+
+	void move(Status = Stand);
 	void stop();
 	virtual bool init();
 	virtual bool initWithFile(const std::string&);
@@ -37,6 +37,20 @@ public:
 
 	inline Direction getDirection() const {
 		return direction;
+	}
+
+	inline void setAttribute(int hp, int dmg, float spd) {
+		HP = hp;
+		damage = dmg;
+		speed = spd;
+	}
+
+	virtual bool hurt(int dmg);
+
+	virtual int getDamage();
+
+	inline bool getIsMoving() {
+		return isMoving;
 	}
 
 protected:

@@ -12,6 +12,7 @@ void Unit::move(Status s) {
 
 	if (s == Status::Jump) {
 		frameName += "Jump";
+		speed = 225.0f;
 	}
 	else if (s == Status::Swim) {
 		frameName += "Swim";
@@ -44,6 +45,10 @@ void Unit::move(Status s) {
 
 void Unit::stop() {
 	std::string frameName = this->getName();
+
+	if (status == Status::Swim) {
+		frameName += "Swim";
+	}
 
 	switch (direction)
 	{
@@ -94,8 +99,24 @@ void Unit::update(float dt) {
 		std::string realName = frameName + (char)(animationIndex + '0');
 		auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(realName);
 		this->setSpriteFrame(frame);
+
+		if (status == Status::Jump && animationIndex + 1 == frameCount[frameName]) {
+			this->status = Status::Stand;
+			this->stop();
+			speed = 150.0f;
+		}
+
 		animationIndex = (animationIndex + 1) % frameCount[frameName];
 
 		timer = 0;
 	}
+}
+
+int Unit::getDamage() {
+	return damage;
+}
+
+bool Unit::hurt(int dmg) {
+	HP -= dmg;
+	return (HP <= 0);
 }

@@ -7,22 +7,43 @@
 #include "PauseScene.h"
 #include "Config.h"
 #include "Enemy.h"
+#include "SelectScene.h"
+#include "Bullet.h"
+#include "GameVictoryScene.h"
+#include "GameProcess.h"
+#include "PauseUILayer.h"
 
 using namespace cocos2d;
 
-bool GameLayer::init() {
+GameLayer* GameLayer::create(int level) {
+	auto layer = new(std::nothrow) GameLayer();
+	if (layer && layer->init(level)) {
+		layer->autorelease();
+	}
+	else if (layer) {
+		delete layer;
+		layer = nullptr;
+	}
+
+	return layer;
+}
+
+bool GameLayer::init(int level) {
 	if (!Layer::init()) {
 		return false;
 	}
 
+	currentLevel = level;
+
 	this->isInteractable = false;
 	this->isMovable = true;
+	this->isTransition = false;
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origion = Director::getInstance()->getVisibleOrigin();
 
 	//add map
-	auto map = MapManager::create(1);
+	auto map = MapManager::create(level);
 	map->setPosition(Vec2::ZERO);
 	map->setName("map");
 	this->addChild(map, 0);
@@ -30,9 +51,11 @@ bool GameLayer::init() {
 	//add player
 	auto player = Player::create("Game/playerDown0.png");
 	player->setName("player");
-	player->setScale(3.5, 3.5);
+	player->setScale(3.2, 3.2);
 	player->setPosition(map->getPlayerPosition());
+	player->setOrigion(player->getPosition());
 	this->addChild(player, 1);
+
 
 	auto shadow = Sprite::create("Game/shadow.png");
 	shadow->setPosition(Vec2(origion.x + visibleSize.width / 2, origion.y + visibleSize.height / 2));
@@ -59,8 +82,8 @@ bool GameLayer::init() {
 
 	//add keyboard call back function
 	auto klistener = EventListenerKeyboard::create();
-	klistener->onKeyPressed = [player,this](EventKeyboard::KeyCode code, Event* event) noexcept {
-		if (this->isMovable) {
+	klistener->onKeyPressed = [player,this](EventKeyboard::KeyCode code, Event* event){
+		if (this->isMovable && player->getStatus() != Unit::Status::Jump) {
 			switch (code)
 			{
 			case EventKeyboard::KeyCode::KEY_A:
@@ -82,28 +105,38 @@ bool GameLayer::init() {
 			}
 		}
 
-		switch (code)
-		{
-		case EventKeyboard::KeyCode::KEY_J:
-			//interact
-			this->interact();
-			break;
-		case EventKeyboard::KeyCode::KEY_K:
-			//jump
-			break;
-		case EventKeyboard::KeyCode::KEY_L:
-			
-			break;
-		case EventKeyboard::KeyCode::KEY_ESCAPE:
-			RenderTexture *renderTexture = RenderTexture::create(1024, 768);
-			renderTexture->begin();
-			this->getParent()->visit();
-			renderTexture->end();
-			//pause game
-			Director::getInstance()->pushScene((Scene*)renderTexture);
-			Scene *scene = PauseScene::createScene();
-			Director::getInstance()->replaceScene(scene); 
-			break;
+		if (!player->getIsMoving()) {
+			switch (code)
+			{
+			case EventKeyboard::KeyCode::KEY_J:
+				//interact
+				this->interact();
+				break;
+			case EventKeyboard::KeyCode::KEY_L:
+				//fire
+				if (player->checkBulletReady()) {
+					player->fire();
+					this->fire();
+				}
+				break;
+			case EventKeyboard::KeyCode::KEY_K:
+				//jump
+				if (player->getStatus() != Unit::Status::Jump && player->hasCollection("plumage")) {
+					player->stop();
+					player->move(Unit::Status::Jump);
+				}
+				break;
+			case EventKeyboard::KeyCode::KEY_ESCAPE:
+				//pause game
+				if (!isTransition) {
+					auto scene = PauseScene::createScene();
+					auto layer = dynamic_cast<PauseUILayer*>(scene->getChildByName("layer"));
+					layer->recievePlayerData(player);
+					Director::getInstance()->pushScene(dynamic_cast<Scene*>(this->getParent()));
+					Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
+				}
+				break;
+			}
 		}
 	};
 
@@ -116,15 +149,34 @@ bool GameLayer::init() {
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(klistener, this);
 
 	this->schedule(schedule_selector(GameLayer::check));
+	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(GameLayer::resume), "resume", nullptr);
 
 	return true;
 }
 
+void GameLayer::resume(Ref*) {
+	auto player = this->getChildByName("player");
+	player->unscheduleAllSelectors();
+	player->schedule(schedule_selector(Player::update));
+
+	auto map = this->getChildByName("map");
+	auto list = map->getChildren();
+
+	this->unscheduleAllSelectors();
+	this->schedule(schedule_selector(GameLayer::check));
+	
+	for (auto node : list) {
+		if (node->getName().substr(0, 5) == "enemy") {
+			node->unscheduleAllSelectors();
+			node->schedule(schedule_selector(Enemy::update));
+			node->schedule(schedule_selector(Enemy::patrol));
+		}
+	}
+}
+
 
 void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
-	CCLOG("%s <-> %s\n", node1->getName().c_str(), node2->getName().c_str());
-
-	if (node2->getName() == "player") {
+	if (node2->getName() == "player" || node2->getName() == "bullet") {
 		std::swap(node1, node2);
 	}
 
@@ -139,15 +191,48 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 			this->push();
 		}
 	}
-	else if (node1->getName() == "player" && node2->getName() == "enemy") {
-		//TODO:
+	else if (node1->getName() == "player" && node2->getName().substr(0, 5) == "enemy") {
+		auto player = dynamic_cast<Player*>(node1);
+		auto enemy = dynamic_cast<Enemy*>(node2);
+
+		player->hurt(enemy->getDamage());
+		player->setProtection();
 	}
 	else if (node1->getName() == "player" && node2->getName() == "trans") {
 		auto pos = static_cast<std::pair<Vec2, Vec2>*>(node2->getUserData());
-		auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+		auto player = dynamic_cast<Player*>(node1);
 		player->setUserData(pos);
 
+		this->isTransition = true;
 		this->schedule(schedule_selector(GameLayer::turnOff));
+	}
+	else if (node1->getName() == "player" && node2->getName() == "door") {
+		auto player = dynamic_cast<Player*>(node1);
+		auto require = *static_cast<std::string*>(node2->getUserData());
+		if (player->hasCollection(require)) {
+			auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
+			map->openDoor(node2->getPosition());
+			node2->setPosition(this->unavailablePos);
+		}
+	}
+	else if (node1->getName() == "player" && node2->getName() == "boss") {
+		if (currentLevel - 1 == Process::getInstance()->FileGet()) {
+			Process::getInstance()->FileModify();
+		}
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, GameVictoryScene::createScene()));
+	}
+	else if (node1->getName() == "bullet" && node2->getName() != "player") {
+		if (node2->getName().substr(0, 5) == "enemy") {
+			auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+			auto enemy = dynamic_cast<Enemy*>(node2);
+
+			if (enemy->hurt(player->getDamage())) {
+				auto map = this->getChildByName("map");
+				map->removeChild(node2);
+			}
+		}
+
+		this->removeChild(node1);
 	}
 }
 
@@ -164,6 +249,7 @@ void GameLayer::turnOff(float) {
 		map->setPosition(map->getPositionX() + pos->first.x, map->getPositionY() + pos->first.y);
 		map->setOffset(pos->first);
 		player->setPosition(pos->second);
+		player->setOrigion(pos->second);
 
 		this->schedule(schedule_selector(GameLayer::turnOff));
 
@@ -178,10 +264,15 @@ void GameLayer::turnOn(float) {
 
 	if (shadow->getOpacity() == 0) {
 		this->unschedule(schedule_selector(GameLayer::turnOn));
+		this->isTransition = false;
 	}
 }
 
 void GameLayer::onContactEnd(cocos2d::Node* node1, cocos2d::Node* node2){
+	if (node1 == nullptr || node2 == nullptr) {
+		return;
+	}
+
 	if (node2->getName() == "player") {
 		std::swap(node1, node2);
 	}
@@ -193,8 +284,10 @@ void GameLayer::onContactEnd(cocos2d::Node* node1, cocos2d::Node* node2){
 	else if (node1->getName() == "player" && node2->getName() == "mov") {
 		node2->setTag(0);
 	}
-	else if (node1->getName() == "player" && node2->getName() == "enemy") {
-		//TODO:
+	else if (node1->getName() == "player" && node2->getName() == "door") {
+		if (node2->getPosition() == this->unavailablePos) {
+			this->removeChild(node2);
+		}
 	}
 }
 
@@ -274,10 +367,84 @@ void GameLayer::push() {
 	if (flag && map->isNull(next)) {
 		map->resetMovableObject(mov->getPosition(), next);
 		mov->setPosition(next);
-		//mov->setTag(0);
+		mov->setName("");
+		mov->setTag(0);
 	}
 }
 
 void GameLayer::check(float dt) {
-	//TODO:
+	auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
+	auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+	auto realPos = player->getPosition() - map->getOffset();
+
+	bool hasHurted = false;
+	if (map->isHole(realPos)) {
+		if (player->getStatus() != Unit::Status::Jump) {
+			hasHurted = true;
+		}
+	}
+	
+	if (map->isWater(realPos)) {
+		if (player->hasCollection("fipperWebFoot")) {
+			if (player->getIsMoving()) {
+				player->stop();
+				player->move(Unit::Status::Swim);
+			}
+			else {
+				player->move(Unit::Status::Swim);
+				player->stop();
+			}
+		}
+		else {
+			hasHurted = true;
+		}
+	}
+	else if (player->getStatus() == Unit::Status::Swim) {
+		player->stop();
+		player->move(Unit::Status::Stand);
+	}
+
+	if (hasHurted) {
+		this->isMovable = false;
+		player->stop();
+		player->hurt(1);
+		player->resetPosition();
+		this->isMovable = true;
+	}
+
+	if (player->hurt(0)) {
+		this->isMovable = false;
+		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::createScene()));
+	}
+}
+
+void GameLayer::fire() {
+	auto player = dynamic_cast<Player*>(this->getChildByName("player"));
+	Unit::Direction dir = player->getDirection();
+
+	auto bullet = Bullet::create();
+	bullet->setName("bullet");
+	auto size = player->getBoundingBox().size;
+
+	switch (dir)
+	{
+	case Unit::Up:
+		bullet->setVelocity(Vec2(0, 1));
+		bullet->setPosition(Vec2(player->getPositionX(), player->getPositionY() + size.height / 2));
+		break;
+	case Unit::Down:
+		bullet->setVelocity(Vec2(0, -1));
+		bullet->setPosition(Vec2(player->getPositionX(), player->getPositionY() - size.height / 2));
+		break;
+	case Unit::Left:
+		bullet->setVelocity(Vec2(-1, 0));
+		bullet->setPosition(Vec2(player->getPositionX() - size.width / 2, player->getPositionY()));
+		break;
+	case Unit::Right:
+		bullet->setVelocity(Vec2(1, 0));
+		bullet->setPosition(Vec2(player->getPositionX() + size.width / 2, player->getPositionY()));
+		break;
+	}
+
+	this->addChild(bullet, 2);
 }

@@ -24,10 +24,9 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-#include "AniamtionLoader.h"
+#include "AnimationLoader.h"
 #include "Config.h"
-#include "GameScene.h" //test only
-#include"GameVictoryScene.h"//test only
+
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -102,30 +101,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // Set the design resolution
     glview->setDesignResolutionSize(mediumResolutionSize.width, mediumResolutionSize.height, ResolutionPolicy::NO_BORDER);
     auto frameSize = glview->getFrameSize();
-    // if the frame's height is larger than the height of medium size.
-    /*if (frameSize.height > mediumResolutionSize.height)
-    {        
-        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
-    }
-    // if the frame's height is larger than the height of small size.
-    else if (frameSize.height > smallResolutionSize.height)
-    {        
-        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
-    }
-    // if the frame's height is smaller than the height of medium size.
-    else
-    {        
-        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
-    }*/
 
     register_all_packages();
 
 	preload();
 
     // create a scene. it's an autorelease object
+    //auto scene = HelloWorld::createScene();
 
-
-	auto sceneMain = GameScene::createScene();// test only
+	auto sceneMain = HelloWorld::createScene();// test only
     // run
     director->runWithScene(sceneMain);
 
@@ -159,5 +143,10 @@ void AppDelegate::applicationWillEnterForeground() {
 void AppDelegate::preload() {
 	Config::getInstance()->loadConfig("config/enemy.csv");
 	Config::getInstance()->loadConfig("config/objects.csv");
-	AniamtionLoader::loadAniamtion("Game/player.alist");
+	AnimationLoader::loadAniamtion("Game/player.alist");
+	AnimationLoader::loadAniamtion("Game/playerJumpHorizontal.alist");
+	AnimationLoader::loadAniamtion("Game/playerJumpVertical.alist");
+	AnimationLoader::loadAniamtion("Game/playerSwim.alist");
+	AnimationLoader::loadAniamtion("enemy/enemy1.alist");
+	AnimationLoader::loadAniamtion("enemy/enemy2.alist");
 }

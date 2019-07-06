@@ -1,8 +1,11 @@
+#include <string.h>
+#include <vector>
+#include "Player.h"
 #include "PauseUILayer.h"
-#include<string.h>
-#include<vector>
-#include"Player.h"
+#include "Config.h"
+
 using namespace cocos2d;
+
 bool PauseUILayer::init() {
 	if (!Layer::init()) {
 		return false;
@@ -13,7 +16,6 @@ bool PauseUILayer::init() {
 
 	//background
 	auto backgound = Sprite::create("pause/back.png");
-	//backgound->setScale(2,2);
 	backgound->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height / 2));
 	this->addChild(backgound, 0);
 
@@ -22,7 +24,7 @@ bool PauseUILayer::init() {
 	sprite1->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.95f);
 	this->addChild(sprite1);
 
-	auto lableBullet = Label::createWithTTF(std::to_string(Player::create()->getBullet()), "fonts/sans.ttf", 20);
+	auto lableBullet = Label::createWithTTF("", "fonts/sans.ttf", 20);
 	lableBullet->setPosition(origin.x + visibleSize.width *0.9f, origin.y + visibleSize.height*0.95f);
 	this->addChild(lableBullet, 1, "bullet");
 
@@ -31,31 +33,41 @@ bool PauseUILayer::init() {
 	sprite2->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.85f);
 	this->addChild(sprite2);
 
-	auto HP = Label::createWithTTF(std::to_string(Player::create()->getHp() ), "fonts/sans.ttf", 20);
+	auto HP = Label::createWithTTF("", "fonts/sans.ttf", 20);
 	HP->setPosition(origin.x + visibleSize.width *0.9f, origin.y + visibleSize.height*0.85f);
 	this->addChild(HP, 1, "HP");
-
-	PauseUILayer::getCollection();
-	float offset = 0.1f;
-	for (auto a =collection.begin(); a != collection.end(); a++) {
-		auto sprite_ = Sprite::create(*a);
-		sprite_->setPosition(origin.x + visibleSize.width*offset, origin.y + visibleSize.height*0.5f);
-		this->addChild(sprite_);
-		offset += 0.1f;
-	}	
-	auto klistener_ = EventListenerKeyboard::create();
-	klistener_->onKeyPressed = [](cocos2d::EventKeyboard::KeyCode code_, cocos2d::Event* event) {
-		if (code_ == EventKeyboard::KeyCode::KEY_ESCAPE) {
-			Director::sharedDirector()->popScene();
+	
+	auto klistener = EventListenerKeyboard::create();
+	klistener->onKeyPressed = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
+		if (code == EventKeyboard::KeyCode::KEY_ESCAPE) {
+			NotificationCenter::getInstance()->postNotification("resume", nullptr);
+			Director::getInstance()->popScene();
 		}
 	};
-	klistener_->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code_, cocos2d::Event* event) {
-	};
-	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(klistener_, this);
+
+	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(klistener, this);
 	
 	return true;
 }
 
-void PauseUILayer::getCollection() {
-	PauseUILayer::collection = Player::create()->getAllCollection();
+void PauseUILayer::recievePlayerData(Player* player) {
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	auto origin = Director::getInstance()->getVisibleOrigin();
+
+	auto bullet = dynamic_cast<Label*>(this->getChildByName("bullet"));
+	auto HP = dynamic_cast<Label*>(this->getChildByName("HP"));
+
+	bullet->setString(std::to_string(player->getBullet()));
+	HP->setString(std::to_string(player->getHP()));
+
+	auto collection = player->getAllCollection();
+	float offset = 0.1f;
+
+	for (auto a = collection.begin(); a != collection.end(); a++) {
+		auto sprite = Sprite::create(Config::getInstance()->getObject(*a).image_path);
+		sprite->setScale(3, 3);
+		sprite->setPosition(origin.x + visibleSize.width * offset, origin.y + visibleSize.height * 0.5f);
+		this->addChild(sprite);
+		offset += 0.1f;
+	}
 }

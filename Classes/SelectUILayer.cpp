@@ -2,6 +2,8 @@
 
 #include"SelectUILayer.h"
 #include"GameProcess.h"
+#include "GameScene.h"
+
 using namespace cocos2d;
 
 bool SelectUILayer::init() {
@@ -44,32 +46,13 @@ bool SelectUILayer::init() {
 	
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
-		auto keycode1 = EventKeyboard::KeyCode::KEY_1;
-		auto keycode2 = EventKeyboard::KeyCode::KEY_2;
-		auto keycode3 = EventKeyboard::KeyCode::KEY_3;
-		auto keycode4 = EventKeyboard::KeyCode::KEY_4;
-		auto keycode5 = EventKeyboard::KeyCode::KEY_5;
 
 		Process *q = Process::getInstance();
-		int a = q->FileGet();
-		int b=static_cast<int>(code)-static_cast<int>(EventKeyboard::KeyCode::KEY_1);
-		if (b > a) {
-			
-		}
-		else if(code == keycode1) {
-			//TODO
-		}
-		else if (code == keycode2) {
-			//TODO
-		}
-		else if (code == keycode3) {
-			//TODO
-		}
-		else if (code == keycode4) {
-			//TODO
-		}
-		else if (code == keycode5) {
-			//TODO
+		int rec = q->FileGet();
+		int sel = static_cast<int>(code) - static_cast<int>(EventKeyboard::KeyCode::KEY_1);
+
+		if (sel <= rec) {
+			Director::getInstance()->replaceScene(TransitionFade::create(1.0f, GameScene::createScene(sel + 1)));
 		}
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);

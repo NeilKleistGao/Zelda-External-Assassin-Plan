@@ -1,5 +1,6 @@
 #include "PauseScene.h"
 #include "PauseUILayer.h" 
+
 using namespace cocos2d;
 
 Scene* PauseScene::createScene() {
@@ -14,10 +15,10 @@ bool PauseScene::init() {
 		return false;
 	}
 	auto ui =PauseUILayer ::create();
+	ui->setName("layer");
 	ui->setPosition(Vec2::ZERO);
 	this->addChild(ui);
 
 	return true;
 
 }
-

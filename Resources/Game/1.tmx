@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="16" height="36" tilewidth="64" tileheight="64" infinite="0" nextlayerid="24" nextobjectid="98">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="16" height="36" tilewidth="64" tileheight="64" infinite="0" nextlayerid="24" nextobjectid="102">
  <tileset firstgid="1" source="1.tsx"/>
  <layer id="23" name="box" width="16" height="36">
   <data encoding="csv">
@@ -334,7 +334,7 @@
    <properties>
     <property name="dx" type="int" value="0"/>
     <property name="dy" type="int" value="-768"/>
-    <property name="newx" type="int" value="512"/>
+    <property name="newx" type="int" value="480"/>
     <property name="newy" type="int" value="130"/>
    </properties>
   </object>
@@ -355,8 +355,8 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="18" name="door" visible="0">
-  <object id="76" x="449" y="767" width="62" height="61">
+ <objectgroup id="18" name="door">
+  <object id="76" x="449" y="799" width="62" height="29">
    <properties>
     <property name="require" value="key1"/>
    </properties>
@@ -466,20 +466,20 @@
   <object id="56" x="413" y="490">
    <properties>
     <property name="index" type="int" value="0"/>
+    <property name="type" type="int" value="1"/>
    </properties>
    <point/>
   </object>
   <object id="57" x="546" y="490">
    <properties>
     <property name="index" type="int" value="0"/>
+    <property name="type" type="int" value="1"/>
    </properties>
    <point/>
   </object>
  </objectgroup>
  <objectgroup id="12" name="boss">
-  <object id="59" x="480" y="107">
-   <point/>
-  </object>
+  <object id="101" x="449" y="62" width="63" height="65"/>
  </objectgroup>
  <objectgroup id="15" name="box">
   <object id="52" x="64" y="1152" width="62" height="59">

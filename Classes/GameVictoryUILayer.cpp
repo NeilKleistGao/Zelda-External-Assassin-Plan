@@ -26,7 +26,7 @@ bool GameVictoryUILayer::init() {
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
 	//add schedule
-	this->schedule(schedule_selector(GameVictoryUILayer::Refresh, 1f));
+	this->schedule(schedule_selector(GameVictoryUILayer::Refresh), 1.0f);
 	return true;
 }
 

@@ -3,7 +3,8 @@
 #include <set>
 #include "cocos2d.h"
 
-typedef std::pair<cocos2d::Vec2, cocos2d::Vec2> VecPair;
+typedef std::pair<cocos2d::Vec2, cocos2d::Vec2> Vec2Pair;
+typedef std::pair<cocos2d::Vec3, cocos2d::Vec3> Vec3Pair;
 
 class MapManager :
 	public cocos2d::Node
@@ -45,19 +46,24 @@ public:
 		map->setVisible(!mode);
 	}
 
-	void resetMovableObject(const cocos2d::Vec2&, const cocos2d::Vec2&);
+	inline void openDoor(const cocos2d::Vec2& pos) {
+		this->setGIDAt(pos, "door", 0);
+	}
 
-	std::vector<VecPair> getEnemyPosition();
+	void resetMovableObject(const cocos2d::Vec2&, const cocos2d::Vec2&);
 
 private:
 	void setPhysicsBoxes();
 	void addNodeByType(const std::string&);
 	void addSpriteByType(const std::string&, const std::string&);
 	void addPositionNode(const std::string&);
+	void addDoors();
 	cocos2d::Vec2 getObjectPosition(const std::string&);
 
 	int getGIDAt(const cocos2d::Vec2&, const std::string);
 	void setGIDAt(const cocos2d::Vec2&, const std::string&, const int);
+
+	std::vector<Vec3Pair> getEnemyPosition();
 
 	cocos2d::Vec2 transform(cocos2d::Vec2);
 

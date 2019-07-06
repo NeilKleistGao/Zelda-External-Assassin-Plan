@@ -19,6 +19,7 @@ bool HelloWorldUILayer::init() {
 	//blink infomation
 	auto label = Label::createWithTTF("Press Any Key To Continue...", "fonts/sans.ttf", 24);
 	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height * 0.2f);
+	label->setColor(Color3B::BLACK);
 	this->addChild(label, 1, "info");
 
 	//add keyboard event

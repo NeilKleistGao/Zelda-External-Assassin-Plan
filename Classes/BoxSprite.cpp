@@ -23,7 +23,6 @@ bool BoxSprite::initWithFile(const std::string& filename) {
 	auto body = PhysicsBody::createBox(Size(this->getBoundingBox().size));
 	body->setRotationEnable(false);
 	body->getShape(0)->setRestitution(0);
-	body->getShape(0)->setDensity(1);
 	body->getShape(0)->setFriction(0);
 	body->getShape(0)->setMass(1);
 	body->getShape(0)->setContactTestBitmask(1);

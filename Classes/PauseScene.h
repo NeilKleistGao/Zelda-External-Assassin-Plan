@@ -1,5 +1,8 @@
 #pragma once
+
 #include "cocos2d.h"
+#include "Player.h"
+
 class PauseScene :public cocos2d::Scene
 {
 public:
@@ -9,6 +12,5 @@ public:
 	virtual bool init();
 
 	CREATE_FUNC(PauseScene);
-
 };
 

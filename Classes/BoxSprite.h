@@ -9,5 +9,10 @@ class BoxSprite :
 public:
 	static BoxSprite* create(const std::string& filename = "");
 	virtual bool initWithFile(const std::string&);
+
+	inline void setDynamic(bool isDynamic) {
+		auto body = this->getPhysicsBody();
+		body->setDynamic(isDynamic);
+	}
 };
 

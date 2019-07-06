@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Enemy.h"
 
 using namespace cocos2d;
@@ -13,7 +15,7 @@ void Enemy::setVertices(const Vec2& v1, const Vec2& v2) {
 		direction = (vertex1.y > vertex2.y) ? Direction::Down : Direction::Up;
 	}
 	else {
-		direction = (vertex1.x > vertex2.x) ? Direction::Right : Direction::Left;
+		direction = (vertex1.x < vertex2.x) ? Direction::Right : Direction::Left;
 	}
 
 	this->move();
@@ -25,22 +27,38 @@ void Enemy::setVertices(const Vec2& v1, const Vec2& v2) {
 	Vec2 target = (origion == vertex1) ? vertex2 : vertex1;
 	
 	if (origion.x == target.x) {
+
+		this->setPositionX(origion.x);
+
 		if (direction == Direction::Up && current.y >= target.y) {
+			this->stop();
+			std::swap(target, origion);
 			direction = Down;
+			
 		}
 		else if (direction == Direction::Down && current.y <= target.y) {
+			this->stop();
+			std::swap(target, origion);
 			direction = Up;
 		}
 	}
 	else {
+
+		this->setPositionY(origion.y);
+
 		if (direction == Direction::Right && current.x >= target.x) {
+			this->stop();
+			std::swap(target, origion);
 			direction = Left;
 		}
 		else if (direction == Direction::Left && current.x <= target.x) {
+			this->stop();
+			std::swap(target, origion);
 			direction = Right;
 		}
-		
 	}
+
+	this->move();
 }
 
 Enemy* Enemy::create() {
@@ -76,7 +94,10 @@ bool Enemy::initWithFile(const std::string& filename) {
 	if (!Unit::initWithFile(filename)) {
 		return false;
 	}
-	frameCount["EnemyDown"] = frameCount["EnemyUp"] = frameCount["EnmeyLeft"] = frameCount["EnmeyRight"] = 2;
+
+	std::string type = filename.substr(filename.find("/") + 1).substr(0, 6);
+
+	frameCount[type + "Down"] = frameCount[type + "Up"] = frameCount[type + "Left"] = frameCount[type + "Right"] = 2;
 	status = Status::Stand;
 	return true;
 }
