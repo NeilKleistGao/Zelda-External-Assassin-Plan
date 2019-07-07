@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "cocos2d.h"
 #include "GameScene.h"
 
@@ -31,7 +32,7 @@ private:
 	cocos2d::PhysicsWorld* theWorld;
 	bool isInteractable, isMovable, isTransition;
 
-	int currentLevel, bgmID;
+	int currentLevel, bgmID, interactionID;
 	int damageTaken;
 
 	float damageTimer;

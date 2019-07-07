@@ -1,5 +1,7 @@
+#include <cctype>
 #include "MessageBox.h"
-#include"Config.h"
+#include "Config.h"
+
 using namespace cocos2d;
 
 bool InteractionMessageBox::init() {
@@ -32,9 +34,13 @@ void InteractionMessageBox::show(bool isLow,const std::string& name) {
 
 	auto label = dynamic_cast<Label*>(this->getChildByName("congratulations"));
 	std::string s = Config::getInstance()->getObject(name).info_text;
-	for (int i = 0; i < sizeof(s); i++) {
-		if (i == 16) {
-			s = s.insert(i, "\n");
+	for (int i = 0; i < s.length(); i++) {
+		if (i % 50 == 0) {
+			std::string temp = "\n";
+			if (i > 0 && i < s.length() - 1 && std::isalpha(s[i - 1]) && std::isalpha(s[i + 1])) {
+				temp += "-";
+			}
+			s = s.insert(i, temp);
 		}
 	}
 

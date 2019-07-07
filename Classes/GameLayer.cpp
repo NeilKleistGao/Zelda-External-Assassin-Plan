@@ -13,9 +13,11 @@
 #include "GameProcess.h"
 #include "PauseUILayer.h"
 #include "audio/include/AudioEngine.h"
+#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
 using namespace experimental;
+using namespace CocosDenshion;
 
 GameLayer* GameLayer::create(int level) {
 	auto layer = new(std::nothrow) GameLayer();
@@ -216,7 +218,9 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 			auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 			map->openDoor(node2->getPosition());
 			node2->setPosition(this->unavailablePos);
-			AudioEngine::play2d("game/open.mp3");
+			AudioEngine::pause(bgmID);
+			AudioEngine::play2d("music/open.mp3");
+			AudioEngine::resumeAll();
 		}
 	}
 	else if (node1->getName() == "player" && node2->getName() == "boss") {
@@ -229,8 +233,6 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		if (node2->getName().substr(0, 5) == "enemy") {
 			auto player = dynamic_cast<Player*>(this->getChildByName("player"));
 			auto enemy = dynamic_cast<Enemy*>(node2);
-
-			AudioEngine::play2d("game/fire.mp3");
 
 			if (enemy->hurt(player->getDamage())) {
 				auto map = this->getChildByName("map");
@@ -320,10 +322,11 @@ void GameLayer::interact() {
 		this->isMovable = false;
 
 		AudioEngine::pause(bgmID);
-		AudioEngine::play2d("game/get.mp3", false);
+		interactionID = AudioEngine::play2d("music/get.mp3", false);
 
 		std::string temp = content;
-		temp += (player->getPositionY() >= visibleSize.height / 2) ? " 1024" : " 0";
+		temp += " ";
+		temp += std::to_string(player->getPositionY());
 
 		auto msg = String::createWithData((const unsigned char*)(temp.c_str()), temp.length());
 		msg->retain();
@@ -343,11 +346,13 @@ void GameLayer::interact() {
 	}
 	else {
 		auto pic = this->getChildByName("temp");
-		AudioEngine::resume(bgmID);
 		if (pic) {
 			this->removeChild(pic, true);
 			this->isMovable = true;
 			NotificationCenter::getInstance()->postNotification("hide");
+
+			AudioEngine::stop(interactionID);
+			AudioEngine::resumeAll();
 		}
 	}
 }
@@ -474,4 +479,8 @@ void GameLayer::fire() {
 	}
 
 	this->addChild(bullet, 2);
+
+	AudioEngine::pause(bgmID);
+	AudioEngine::play2d("music/fire.mp3");
+	AudioEngine::resumeAll();
 }

@@ -1,7 +1,10 @@
 #include "GameVictoryUILayer.h"
-#include"SelectScene.h"
-#include"GameProcess.h"
+#include "SelectScene.h"
+#include "GameProcess.h"
+#include "audio/include/AudioEngine.h"
+
 using namespace cocos2d;
+using namespace experimental;
 
 bool GameVictoryUILayer::init() {
 	if (!Layer::init()) {
@@ -24,6 +27,9 @@ bool GameVictoryUILayer::init() {
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::createScene()));
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
+	AudioEngine::stopAll();
+	AudioEngine::play2d("music/end.mp3");
 
 	//add schedule
 	this->schedule(schedule_selector(GameVictoryUILayer::Refresh), 1.0f);

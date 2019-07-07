@@ -96,7 +96,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
@@ -160,8 +160,8 @@ void AppDelegate::preload() {
 	AudioEngine::preload("music/3.mp3");
 	AudioEngine::preload("music/4.mp3");
 	AudioEngine::preload("music/5.mp3");
-	AudioEngine::preload("music/get.mp3");
-	AudioEngine::preload("music/open.mp3");
-	AudioEngine::preload("music/hurt.mp3");
-	AudioEngine::preload("music/fire.mp3");
+	AudioEngine::preload("music/get.wav");
+	AudioEngine::preload("music/open.wav");
+	AudioEngine::preload("music/hurt.wav");
+	AudioEngine::preload("music/fire.wav");
 }

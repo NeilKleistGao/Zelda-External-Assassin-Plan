@@ -62,7 +62,9 @@ bool Player::hurt(int dmg) {
 		return false;
 	}
 
-	AudioEngine::play2d("game/hurt.mp3");
-
+	if (dmg > 0) {
+		AudioEngine::play2d("music/hurt.mp3");
+	}
+	
 	return Unit::hurt(dmg);
 }
