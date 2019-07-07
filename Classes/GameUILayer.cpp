@@ -4,6 +4,10 @@
 
 using namespace cocos2d;
 
+GameUILayer::~GameUILayer() {
+	NotificationCenter::getInstance()->removeAllObservers(this);
+}
+
 bool GameUILayer::init() {
 	if (!Layer::init()) {
 		return false;
@@ -35,9 +39,4 @@ void GameUILayer::recieveAndShow(Ref* msg) {
 void GameUILayer::recieveAndHide(Ref*) {
 	auto box = dynamic_cast<InteractionMessageBox*>(this->getChildByName("box"));
 	box->hide();
-}
-
-void GameUILayer::onExit() {
-	NotificationCenter::getInstance()->removeAllObservers(this);
-	Layer::onExit();
 }

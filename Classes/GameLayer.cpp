@@ -13,11 +13,14 @@
 #include "GameProcess.h"
 #include "PauseUILayer.h"
 #include "audio/include/AudioEngine.h"
-#include "SimpleAudioEngine.h"
+#include "Debuger.h"
 
 using namespace cocos2d;
 using namespace experimental;
-using namespace CocosDenshion;
+
+GameLayer::~GameLayer() {
+	NotificationCenter::getInstance()->removeAllObservers(this);
+}
 
 GameLayer* GameLayer::create(int level) {
 	auto layer = new(std::nothrow) GameLayer();
@@ -63,7 +66,6 @@ bool GameLayer::init(int level) {
 	player->setPosition(map->getPlayerPosition());
 	player->setOrigion(player->getPosition());
 	this->addChild(player, 1);
-
 
 	auto shadow = Sprite::create("Game/shadow.png");
 	shadow->setPosition(Vec2(origion.x + visibleSize.width / 2, origion.y + visibleSize.height / 2));
@@ -158,7 +160,7 @@ bool GameLayer::init(int level) {
 
 	this->schedule(schedule_selector(GameLayer::check));
 	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(GameLayer::resume), "resume", nullptr);
-
+	
 	return true;
 }
 
@@ -230,9 +232,12 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, GameVictoryScene::createScene()));
 	}
 	else if (node1->getName() == "bullet" && node2->getName() != "player") {
+
 		if (node2->getName().substr(0, 5) == "enemy") {
 			auto player = dynamic_cast<Player*>(this->getChildByName("player"));
 			auto enemy = dynamic_cast<Enemy*>(node2);
+
+			logMessage("wryyyyy");
 
 			if (enemy->hurt(player->getDamage())) {
 				auto map = this->getChildByName("map");

@@ -83,6 +83,8 @@ bool Unit::initWithFile(const std::string& filename) {
 		return false;
 	}
 
+	this->isMoving = false;
+
 	this->schedule(schedule_selector(Unit::update), 1.0f);
 	return true;
 }
@@ -96,10 +98,12 @@ void Unit::update(float dt) {
 	timer += dt;
 
 	if (timer >= animationDelta) {
-		std::string realName = frameName + (char)(animationIndex + '0');
+		std::string realName = frameName + std::to_string(animationIndex);
 		auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(realName);
 		this->setSpriteFrame(frame);
 
+		
+	
 		if (status == Status::Jump && animationIndex + 1 == frameCount[frameName]) {
 			this->status = Status::Stand;
 			this->stop();

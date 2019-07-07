@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include "MapManager.h"
 #include "Enemy.h"
 #include "BoxSprite.h"
@@ -38,12 +40,14 @@ bool MapManager::init(const int& index) {
 
 	for (auto posPair : list) {
 		std::string name = "enemy";
-		name += (char)((int)(posPair.first.z) + '0');
+		name += std::to_string((int)posPair.first.z);
 
 		auto enemy = Enemy::create("enemy/" + name + "Down0.png");
 		enemy->setName(name);
 		enemy->setPosition(Vec2(posPair.first.x, posPair.first.y));
 		enemy->setVertices(Vec2(posPair.first.x, posPair.first.y), Vec2(posPair.second.x, posPair.second.y));
+
+		
 
 		auto data = conf->getEnemy(name);
 		enemy->setAttribute(data.HP, data.damage, data.speed);
@@ -51,11 +55,7 @@ bool MapManager::init(const int& index) {
 		this->addChild(enemy);
 	}
 
-	filename = "Game/boss";
-	filename += (char)(index + '0');
-	filename += ".png";
-
-	auto boss = BoxSprite::create(filename);
+	auto boss = BoxSprite::create("Game/boss" + std::to_string(index) + ".png");
 	boss->setPosition(this->getBossPosition());
 	boss->setName("boss");
 	boss->setDynamic(false);

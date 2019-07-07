@@ -8,6 +8,8 @@ class GameLayer :
 	public cocos2d::Layer
 {
 public:
+	~GameLayer();
+
 	virtual bool init(int);
 	static GameLayer* create(int);
 

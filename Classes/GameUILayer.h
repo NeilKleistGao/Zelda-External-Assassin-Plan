@@ -5,11 +5,11 @@ class GameUILayer :
 	public cocos2d::Layer
 {
 public:
+	~GameUILayer();
+
 	virtual bool init();
 	CREATE_FUNC(GameUILayer);
 
 	void recieveAndShow(cocos2d::Ref*);
 	void recieveAndHide(cocos2d::Ref*);
-
-	virtual void onExit();
 };
