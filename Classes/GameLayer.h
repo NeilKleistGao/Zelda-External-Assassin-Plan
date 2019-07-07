@@ -20,9 +20,10 @@ public:
 	void onContactBegin(cocos2d::Node*, cocos2d::Node*);
 	void onContactEnd(cocos2d::Node*, cocos2d::Node*);
 
-	void interact();
+	bool interact();
 	void push();
 	void fire();
+	void close();
 
 	void check(float);
 	void turnOff(float);

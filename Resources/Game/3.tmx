@@ -226,7 +226,7 @@
 </data>
  </layer>
  <objectgroup id="10" name="box">
-  <object id="1" x="64" y="1089.33" width="64" height="61.3333">
+  <object id="1" x="64" y="1089.33" width="60" height="61.3333">
    <properties>
     <property name="content" value="bullet"/>
    </properties>

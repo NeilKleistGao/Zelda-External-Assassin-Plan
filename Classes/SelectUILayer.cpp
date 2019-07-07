@@ -44,10 +44,6 @@ bool SelectUILayer::init() {
 		this->addChild(sprite_);
 		offset += 0.2f;
 	}
-
-	auto label_ = Label::createWithTTF("press 1 to the first checkpoint,2 to the second checkpoint and so on", "fonts/sans.ttf", 15);
-	label_->setPosition(origin.x + visibleSize.width*0.7f, origin.y + visibleSize.height*0.1f);
-	this->addChild(label_, 1, "tips");
 	
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {

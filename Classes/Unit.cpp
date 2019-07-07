@@ -10,6 +10,8 @@ void Unit::move(Status s) {
 		status = s;
 	}
 
+	speed = 150.0f;
+
 	if (s == Status::Jump) {
 		frameName += "Jump";
 		speed = 225.0f;

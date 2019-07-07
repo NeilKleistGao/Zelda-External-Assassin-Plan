@@ -7,7 +7,7 @@ public:
 	virtual bool init();
 	CREATE_FUNC(InteractionMessageBox);
 
-	void show(bool isLow, const std::string& name);
+	void show(float y, const std::string& name);
 	void hide();
 };
 

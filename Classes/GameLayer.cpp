@@ -120,7 +120,9 @@ bool GameLayer::init(int level) {
 			{
 			case EventKeyboard::KeyCode::KEY_J:
 				//interact
-				this->interact();
+				if (!this->interact()) {
+					this->close();
+				}
 				break;
 			case EventKeyboard::KeyCode::KEY_L:
 				//fire
@@ -184,8 +186,11 @@ void GameLayer::resume(Ref*) {
 	}
 }
 
-
 void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
+	if (node1 == nullptr || node2 == nullptr) {
+		return;
+	}
+
 	if (node2->getName() == "player" || node2->getName() == "bullet") {
 		std::swap(node1, node2);
 	}
@@ -224,6 +229,13 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 			AudioEngine::play2d("music/open.mp3");
 			AudioEngine::resumeAll();
 		}
+		else{
+			require = "You need:" + require + "*" + std::to_string(player->getPositionY());
+			auto msg = String::createWithData((const unsigned char*)(require.c_str()), require.length());
+			msg->retain();
+			NotificationCenter::getInstance()->postNotification("show", msg);
+			this->isMovable = false;
+		}
 	}
 	else if (node1->getName() == "player" && node2->getName() == "boss") {
 		if (currentLevel - 1 == Process::getInstance()->FileGet()) {
@@ -236,8 +248,6 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		if (node2->getName().substr(0, 5) == "enemy") {
 			auto player = dynamic_cast<Player*>(this->getChildByName("player"));
 			auto enemy = dynamic_cast<Enemy*>(node2);
-
-			logMessage("wryyyyy");
 
 			if (enemy->hurt(player->getDamage())) {
 				auto map = this->getChildByName("map");
@@ -308,9 +318,9 @@ void GameLayer::onContactEnd(cocos2d::Node* node1, cocos2d::Node* node2){
 	}
 }
 
-void GameLayer::interact() {
+bool GameLayer::interact() {
 	if (!this->isInteractable) {
-		return;
+		return false;
 	}
 	
 	auto visibleSize = Director::getInstance()->getVisibleSize();
@@ -330,7 +340,7 @@ void GameLayer::interact() {
 		interactionID = AudioEngine::play2d("music/get.mp3", false);
 
 		std::string temp = content;
-		temp += " ";
+		temp += "*";
 		temp += std::to_string(player->getPositionY());
 
 		auto msg = String::createWithData((const unsigned char*)(temp.c_str()), temp.length());
@@ -348,18 +358,11 @@ void GameLayer::interact() {
 
 		content = "";
 		box->setUserData(new std::string(content));
-	}
-	else {
-		auto pic = this->getChildByName("temp");
-		if (pic) {
-			this->removeChild(pic, true);
-			this->isMovable = true;
-			NotificationCenter::getInstance()->postNotification("hide");
 
-			AudioEngine::stop(interactionID);
-			AudioEngine::resumeAll();
-		}
+		return true;
 	}
+	
+	return false;
 }
 
 void GameLayer::push() {
@@ -430,6 +433,7 @@ void GameLayer::check(float dt) {
 
 	if (hasHurted) {
 		this->isMovable = false;
+		player->move();
 		player->stop();
 		player->hurt(1);
 		player->resetPosition();
@@ -488,4 +492,18 @@ void GameLayer::fire() {
 	AudioEngine::pause(bgmID);
 	AudioEngine::play2d("music/fire.mp3");
 	AudioEngine::resumeAll();
+}
+
+void GameLayer::close() {
+	auto pic = this->getChildByName("temp");
+
+	this->isMovable = true;
+	NotificationCenter::getInstance()->postNotification("hide");
+
+	if (pic) {
+		this->removeChild(pic, true);
+
+		AudioEngine::stop(interactionID);
+		AudioEngine::resumeAll();
+	}
 }

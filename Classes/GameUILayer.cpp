@@ -31,9 +31,9 @@ void GameUILayer::recieveAndShow(Ref* msg) {
 	std::string str = dynamic_cast<String*>(msg)->getCString();
 	auto box = dynamic_cast<InteractionMessageBox*>(this->getChildByName("box"));
 
-	int space = str.find(' ');
-	std::string name = str.substr(0, space), type = str.substr(space + 1);
-	box->show((type == "0"), name);
+	int space = str.find('*');
+	std::string name = str.substr(0, space), pos = str.substr(space + 1);
+	box->show(atof(pos.c_str()), name);
 }
 
 void GameUILayer::recieveAndHide(Ref*) {

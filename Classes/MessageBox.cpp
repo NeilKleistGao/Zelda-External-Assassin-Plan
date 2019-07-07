@@ -25,7 +25,7 @@ bool InteractionMessageBox::init() {
 }
 
 
-void InteractionMessageBox::show(bool isLow,const std::string& name) {
+void InteractionMessageBox::show(float y,const std::string& name) {
 
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
@@ -33,7 +33,15 @@ void InteractionMessageBox::show(bool isLow,const std::string& name) {
 	auto box = Node::getChildByName("box");
 
 	auto label = dynamic_cast<Label*>(this->getChildByName("congratulations"));
-	std::string s = Config::getInstance()->getObject(name).info_text;
+	std::string s = "";
+
+	if (name.substr(0, 3) != "You") {
+		s = Config::getInstance()->getObject(name).info_text;
+	}
+	else {
+		s = name;
+	}
+
 	for (int i = 0; i < s.length(); i++) {
 		if (i % 50 == 0) {
 			std::string temp = "\n";
@@ -47,7 +55,7 @@ void InteractionMessageBox::show(bool isLow,const std::string& name) {
 	label->setString(s);
 	label->setAnchorPoint(Vec2::ZERO);
 
-	if (isLow) {
+	if (y <= visibleSize.height / 2) {
 		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.875f);
 		label->setPosition(origin.x + visibleSize.width*0.305f, origin.y + visibleSize.height*0.95f);
 	}
@@ -62,8 +70,8 @@ void InteractionMessageBox::show(bool isLow,const std::string& name) {
 }
 
 void InteractionMessageBox::hide() {
-	Node* messageBox = Node::getChildByName("box");
-	Node* label = Node::getChildByName("congratulations");
+	Node* messageBox = getChildByName("box");
+	Node* label = getChildByName("congratulations");
 
 	messageBox->setVisible(false);
 	label->setVisible(false);
