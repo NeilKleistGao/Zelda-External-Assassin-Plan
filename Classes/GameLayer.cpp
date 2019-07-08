@@ -112,8 +112,6 @@ bool GameLayer::init(int level) {
 				player->setDirection(Unit::Direction::Up);
 				player->move(Unit::Status::Stand);
 				break;
-			case EventKeyboard::KeyCode::KEY_X:
-				player->hurt(4);
 			}
 		}
 
