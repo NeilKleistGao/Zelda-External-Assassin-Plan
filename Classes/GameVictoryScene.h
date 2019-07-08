@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+/*Game Victory object*/
 class GameVictoryScene :
 	public cocos2d::Scene
 {

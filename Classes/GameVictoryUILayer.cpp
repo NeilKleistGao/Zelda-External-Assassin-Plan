@@ -10,6 +10,8 @@ bool GameVictoryUILayer::init() {
 	if (!Layer::init()) {
 		return false;
 	}
+
+	//create Linister
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 	auto background = Sprite::create("Game/Victory.png");
@@ -21,13 +23,13 @@ bool GameVictoryUILayer::init() {
 	label->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height * 0.2f);
 	this->addChild(label, 1,"Victory" );
 
-
+//create Linister
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyReleased = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
 		Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectScene::createScene()));
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-
+	//play music
 	AudioEngine::stopAll();
 	AudioEngine::play2d("music/end.mp3");
 
@@ -41,6 +43,6 @@ void GameVictoryUILayer::Refresh(float dt) {
 	label->setVisible(!label->isVisible());
 }
 void GameVictoryUILayer::DataRetore(){
-	Process::getInstance()->FileModify();
+	Process::getInstance()->FileModify();//保存游戏进度
 
 }

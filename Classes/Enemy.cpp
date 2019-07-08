@@ -10,7 +10,7 @@ void Enemy::setVertices(const Vec2& v1, const Vec2& v2) {
 
 	origion = v1;
 	this->setPosition(v1.x, v1.y);
-
+	                         /*设置方向逻辑*/
 	if (vertex1.x == vertex2.x) {
 		direction = (vertex1.y > vertex2.y) ? Direction::Down : Direction::Up;
 	}
@@ -18,22 +18,22 @@ void Enemy::setVertices(const Vec2& v1, const Vec2& v2) {
 		direction = (vertex1.x < vertex2.x) ? Direction::Right : Direction::Left;
 	}
 
-	this->move();
-	this->schedule(schedule_selector(Enemy::patrol));
+	this->move();//调运基类的move()函数
+	this->schedule(schedule_selector(Enemy::patrol));//60帧刷新
 }
 
  void Enemy::patrol(float dt) {
-	auto current = this->getPosition();
-	Vec2 target = (origion == vertex1) ? vertex2 : vertex1;
+	auto current = this->getPosition();//获取当前坐标
+	Vec2 target = (origion == vertex1) ? vertex2 : vertex1;//获取目的坐标
 	
 	if (origion.x == target.x) {
 
 		this->setPositionX(origion.x);
 
 		if (direction == Direction::Up && current.y >= target.y) {
-			this->stop();
-			std::swap(target, origion);
-			direction = Down;
+			this->stop();//首先停止运动
+			std::swap(target, origion);//交换起始和目的坐标
+			direction = Down;//改变方向
 			
 		}
 		else if (direction == Direction::Down && current.y <= target.y) {
@@ -62,7 +62,7 @@ void Enemy::setVertices(const Vec2& v1, const Vec2& v2) {
 }
 
 Enemy* Enemy::create() {
-	auto enemy = new(std::nothrow)Enemy();
+	auto enemy = new(std::nothrow)Enemy();//创建enemy对象
 
 	if (enemy && enemy->init()) {
 		enemy->autorelease();

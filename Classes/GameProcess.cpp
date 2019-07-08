@@ -3,9 +3,9 @@
 
 using namespace cocos2d;
 
-Process* Process::instance = nullptr;
+Process* Process::instance = nullptr;//Initially empty object
 
-Process* Process::getInstance() {
+Process* Process::getInstance() {//create single case
 	if (!instance) {
 		instance = new(std::nothrow) Process();
 	}
@@ -13,16 +13,16 @@ Process* Process::getInstance() {
 	return instance;
 }
 
-void Process::FileModify() {
+void Process::FileModify() {//use cocos::Userdefault restore the data
 	UserDefault* FileProcess = UserDefault::getInstance();
 	FileProcess->setIntegerForKey("CheckPoint", FileProcess->getIntegerForKey("CheckPoint") + 1);
 }
 
-int Process::FileGet() {
-	if (UserDefault::getInstance()->isXMLFileExist()) {
+int Process::FileGet() {//get the process 
+	if (UserDefault::getInstance()->isXMLFileExist()) {//if it have such checkPoint then return it
 		return UserDefault::getInstance()->getIntegerForKey("CheckPoint");
 	}
-	else {
+	else {//if no such a check create it ,and return 0
 		UserDefault* FileProcess = UserDefault::getInstance();
 		FileProcess->setIntegerForKey("CheckPoint", 0);
 		return 0;
