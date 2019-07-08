@@ -46,6 +46,8 @@ bool Player::initWithFile(const std::string& filename) {
 	frameCount["playerJumpDown"] = frameCount["playerJumpUp"] = frameCount["playerJumpLeft"] = frameCount["playerJumpRight"] = 3;
 	status = Status::Stand;
 
+	this->schedule(schedule_selector(Player::blink), 0.5f);
+
 	return true;
 }
 
@@ -67,4 +69,17 @@ bool Player::hurt(int dmg) {
 	}
 	
 	return Unit::hurt(dmg);
+}
+
+void Player::blink(float) {
+	if (!isProtected) {
+		return;
+	}
+
+	if (this->getColor() == Color3B::RED) {
+		this->setColor(Color3B::WHITE);
+	}
+	else {
+		this->setColor(Color3B::RED);
+	}
 }

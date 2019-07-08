@@ -2,6 +2,7 @@
 #include <vector>
 #include "Player.h"
 #include "PauseUILayer.h"
+#include "SelectScene.h"
 #include "Config.h"
 
 using namespace cocos2d;
@@ -45,6 +46,9 @@ bool PauseUILayer::init() {
 		if (code == EventKeyboard::KeyCode::KEY_ESCAPE) {
 			NotificationCenter::getInstance()->postNotification("resume", nullptr);
 			Director::getInstance()->popScene();
+		}
+		else if (code == EventKeyboard::KeyCode::KEY_BACKSPACE) {
+			Director::getInstance()->replaceScene(SelectScene::createScene());
 		}
 	};
 

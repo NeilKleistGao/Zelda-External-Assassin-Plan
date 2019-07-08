@@ -160,6 +160,7 @@ bool GameLayer::init(int level) {
 	};
 	Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(klistener, this);
 
+	//add schedule
 	this->schedule(schedule_selector(GameLayer::check));
 	NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(GameLayer::resume), "resume", nullptr);
 	
@@ -167,9 +168,12 @@ bool GameLayer::init(int level) {
 }
 
 void GameLayer::resume(Ref*) {
+	//restart all schedule
+
 	auto player = this->getChildByName("player");
 	player->unscheduleAllSelectors();
 	player->schedule(schedule_selector(Player::update));
+	player->schedule(schedule_selector(Player::blink));
 
 	auto map = this->getChildByName("map");
 	auto list = map->getChildren();
@@ -216,15 +220,16 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 		player->setUserData(pos);
 
 		this->isTransition = true;
-		this->schedule(schedule_selector(GameLayer::turnOff));
+		this->schedule(schedule_selector(GameLayer::turnOff));//turn off and make transition
 	}
 	else if (node1->getName() == "player" && node2->getName() == "door") {
 		auto player = dynamic_cast<Player*>(node1);
 		auto require = *static_cast<std::string*>(node2->getUserData());
+		//if have key required, open it; otherwise, let player find it
 		if (player->hasCollection(require)) {
 			auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 			map->openDoor(node2->getPosition());
-			node2->setPosition(this->unavailablePos);
+			map->removeChild(node2);
 			AudioEngine::pause(bgmID);
 			AudioEngine::play2d("music/open.mp3");
 			AudioEngine::resumeAll();
@@ -268,7 +273,7 @@ void GameLayer::turnOff(float) {
 		auto pos = static_cast<std::pair<Vec2, Vec2>*>(player->getUserData());
 		auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 		
-
+		//reset map's and player's position
 		map->setPosition(map->getPositionX() + pos->first.x, map->getPositionY() + pos->first.y);
 		map->setOffset(pos->first);
 		player->setPosition(pos->second);
@@ -307,11 +312,6 @@ void GameLayer::onContactEnd(cocos2d::Node* node1, cocos2d::Node* node2){
 	else if (node1->getName() == "player" && node2->getName() == "mov") {
 		node2->setTag(0);
 	}
-	else if (node1->getName() == "player" && node2->getName() == "door") {
-		if (node2->getPosition() == this->unavailablePos) {
-			this->removeChild(node2);
-		}
-	}
 	else if (node1->getName() == "player" && node2->getName().substr(0, 5) == "enemy") {
 		auto enemy = dynamic_cast<Enemy*>(node2);
 		damageTaken -= enemy->getDamage();
@@ -333,6 +333,7 @@ bool GameLayer::interact() {
 	std::string content = *static_cast<std::string*>(box->getUserData());
 	auto offset = map->getOffset();
 
+	//there is something in the box
 	if (content != "") {
 		this->isMovable = false;
 
@@ -356,6 +357,7 @@ bool GameLayer::interact() {
 		
 		player->addCollection(content);
 
+		//clear the box
 		content = "";
 		box->setUserData(new std::string(content));
 
@@ -411,6 +413,7 @@ void GameLayer::check(float dt) {
 		}
 	}
 	
+	//in the water
 	if (map->isWater(realPos)) {
 		if (player->hasCollection("fipperWebFoot")) {
 			if (player->getIsMoving()) {
@@ -426,7 +429,7 @@ void GameLayer::check(float dt) {
 			hasHurted = true;
 		}
 	}
-	else if (player->getStatus() == Unit::Status::Swim) {
+	else if (player->getStatus() == Unit::Status::Swim)/*above a hole*/ {
 		player->stop();
 		player->move(Unit::Status::Stand);
 	}
@@ -440,6 +443,7 @@ void GameLayer::check(float dt) {
 		this->isMovable = true;
 	}
 
+	//dead, GG
 	if (player->hurt(damageTaken)) {
 		this->isMovable = false;
 		Director::getInstance()->replaceScene(SelectScene::createScene());

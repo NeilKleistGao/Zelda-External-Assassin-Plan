@@ -145,12 +145,12 @@ void AppDelegate::applicationWillEnterForeground() {
 void AppDelegate::preload() {
 	Config::getInstance()->loadConfig("config/enemy.csv");
 	Config::getInstance()->loadConfig("config/objects.csv");
-	AnimationLoader::loadAniamtion("Game/player.alist");
-	AnimationLoader::loadAniamtion("Game/playerJumpHorizontal.alist");
-	AnimationLoader::loadAniamtion("Game/playerJumpVertical.alist");
-	AnimationLoader::loadAniamtion("Game/playerSwim.alist");
-	AnimationLoader::loadAniamtion("enemy/enemy1.alist");
-	AnimationLoader::loadAniamtion("enemy/enemy2.alist");
+	AnimationLoader::loadAnimation("Game/player.alist");
+	AnimationLoader::loadAnimation("Game/playerJumpHorizontal.alist");
+	AnimationLoader::loadAnimation("Game/playerJumpVertical.alist");
+	AnimationLoader::loadAnimation("Game/playerSwim.alist");
+	AnimationLoader::loadAnimation("enemy/enemy1.alist");
+	AnimationLoader::loadAnimation("enemy/enemy2.alist");
 
 	AudioEngine::preload("music/begin.mp3");
 	AudioEngine::preload("music/select.mp3");

@@ -4,7 +4,7 @@
 
 using namespace cocos2d;
 
-void AnimationLoader::loadAniamtion(const std::string& filename) {
+void AnimationLoader::loadAnimation(const std::string& filename) {
 	std::ifstream stream(filename);
 
 	try {

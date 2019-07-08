@@ -6,6 +6,10 @@
 class AnimationLoader
 {
 public:
-	static void loadAniamtion(const std::string&);
+	/*
+	load animation
+	@param	animation file path
+	*/
+	static void loadAnimation(const std::string&);
 };
 

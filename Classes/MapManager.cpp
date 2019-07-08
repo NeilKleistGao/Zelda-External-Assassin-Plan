@@ -221,7 +221,7 @@ int MapManager::getGIDAt(const Vec2& pos, const std::string layerName) {
 	return layer->getTileGIDAt(realPos);
 }
 
-void MapManager::setGIDAt(const Vec2& pos, const std::string& layerName, const int gid) {
+void MapManager::setGIDAt(const Vec2& pos, const std::string& layerName, const int& gid) {
 	Vec2 realPos = transform(pos);
 	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
 	auto layer = map->getLayer(layerName);

@@ -58,6 +58,10 @@ public:
     */
     virtual void applicationWillEnterForeground();
 
+	/*
+	preload some resources before game starts
+	@param	none
+	*/
 	void preload();
 };
 

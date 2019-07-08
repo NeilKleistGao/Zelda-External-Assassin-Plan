@@ -13,7 +13,6 @@ Scene* GameScene::createScene(int level) {
 
 	auto game = GameLayer::create(level);
 	game->setPosition(Vec2::ZERO);
-	game->setPhysicsWorld(scene->getPhysicsWorld());
 	scene->addChild(game, 1);
 
 	auto ui = GameUILayer::create();

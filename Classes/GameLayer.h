@@ -13,34 +13,60 @@ public:
 	virtual bool init(int);
 	static GameLayer* create(int);
 
-	inline void setPhysicsWorld(cocos2d::PhysicsWorld* world) {
-		theWorld = world;
-	}
-
+	/*
+	function for physics contact, called when contact begins
+	@param	two objects having contact
+	*/
 	void onContactBegin(cocos2d::Node*, cocos2d::Node*);
+	/*
+	function for physics contact, called when contact ends
+	@param	two objects having contact
+	*/
 	void onContactEnd(cocos2d::Node*, cocos2d::Node*);
 
+	/*
+	interact to other objects
+	*/
 	bool interact();
+	/*
+	push movable objects
+	*/
 	void push();
+	/*
+	shoot function
+	*/
 	void fire();
+	/*
+	close the message box if it is open
+	*/
 	void close();
 
+	/*
+	check if player is alive or player is in a dangrous place
+	*/
 	void check(float);
+	/*
+	turn off the light so that we can reset the scene
+	*/
 	void turnOff(float);
+	/*
+	turn on the light after finishing reseting
+	*/
 	void turnOn(float);
 
+	/*
+	resume from pause
+	*/
 	void resume(cocos2d::Ref*);
 
 private:
-	cocos2d::PhysicsWorld* theWorld;
-	bool isInteractable, isMovable, isTransition;
+	bool isInteractable, isMovable, isTransition;//whether player/scene can interact/move/make transition
 
-	int currentLevel, bgmID, interactionID;
-	int damageTaken;
+	int currentLevel, bgmID, interactionID;//the level of this checkpoint and music ID
+	int damageTaken;//the damage player will take from enemies
 
-	float damageTimer;
+	float damageTimer;//calculate the time for damage
 
-	const int interactingFlag = 3154, movableFlag = 2517;
-	const cocos2d::Vec2 unavailablePos = cocos2d::Vec2(-99999999, -99999999);
+	const int interactingFlag = 3154, movableFlag = 2517;//tag of object which player is interacting to/pushing
 };
 
