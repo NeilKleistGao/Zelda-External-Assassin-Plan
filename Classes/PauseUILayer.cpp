@@ -14,11 +14,12 @@ bool PauseUILayer::init() {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
-	//background
+	//create a sprite which set the background of the pause scene
 	auto backgound = Sprite::create("pause/back.png");
 	backgound->setPosition(Vec2(origin.x + visibleSize.width/2, origin.y + visibleSize.height / 2));
 	this->addChild(backgound, 0);
 
+	//show the ammout of ammo left by the player 
 	auto sprite1 = Sprite::create("pause/bullet.png");
 	sprite1->setScale(2.5,2.5);
 	sprite1->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.95f);
@@ -28,6 +29,7 @@ bool PauseUILayer::init() {
 	lableBullet->setPosition(origin.x + visibleSize.width *0.9f, origin.y + visibleSize.height*0.95f);
 	this->addChild(lableBullet, 1, "bullet");
 
+	//Display the player's blood volume
 	auto sprite2 = Sprite::create("pause/Blood.png");
 	sprite2->setScale(2.5, 2.5);
 	sprite2->setPosition(origin.x + visibleSize.width*0.8f, origin.y + visibleSize.height*0.85f);
@@ -37,6 +39,7 @@ bool PauseUILayer::init() {
 	HP->setPosition(origin.x + visibleSize.width *0.9f, origin.y + visibleSize.height*0.85f);
 	this->addChild(HP, 1, "HP");
 	
+	//Press any key to exit the pause interface and return to the game.
 	auto klistener = EventListenerKeyboard::create();
 	klistener->onKeyPressed = [](cocos2d::EventKeyboard::KeyCode code, cocos2d::Event* event) {
 		if (code == EventKeyboard::KeyCode::KEY_ESCAPE) {
@@ -50,6 +53,7 @@ bool PauseUILayer::init() {
 	return true;
 }
 
+//Display the objects currently owned by the player
 void PauseUILayer::recievePlayerData(Player* player) {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();

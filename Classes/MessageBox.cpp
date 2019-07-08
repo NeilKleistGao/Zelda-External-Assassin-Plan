@@ -12,11 +12,11 @@ bool InteractionMessageBox::init() {
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	auto origin = Director::getInstance()->getVisibleOrigin();
 
-	auto messageBox = Sprite::create("Message/1.png");
+	auto messageBox = Sprite::create("Message/1.png");//create a message box
 	this->addChild(messageBox, 1, "box");
 	messageBox->setVisible(false);
 
-	
+	//create a lebal which show in message box.
 	auto label = Label::createWithTTF("   ", "fonts/sans.ttf", 15);
 	this->addChild(label, 1, "congratulations");
 	label->setVisible(false);
@@ -41,7 +41,7 @@ void InteractionMessageBox::show(float y,const std::string& name) {
 	else {
 		s = name;
 	}
-
+	//Wrap the displayed information.
 	for (int i = 0; i < s.length(); i++) {
 		if (i % 50 == 0) {
 			std::string temp = "\n";
@@ -55,6 +55,7 @@ void InteractionMessageBox::show(float y,const std::string& name) {
 	label->setString(s);
 	label->setAnchorPoint(Vec2::ZERO);
 
+	//Set the corresponding location of the messagebox according to the location of the NPC
 	if (y <= visibleSize.height / 2) {
 		box->setPosition(origin.x + visibleSize.width/2, origin.y + visibleSize.height*0.875f);
 		label->setPosition(origin.x + visibleSize.width*0.305f, origin.y + visibleSize.height*0.95f);
@@ -73,6 +74,6 @@ void InteractionMessageBox::hide() {
 	Node* messageBox = getChildByName("box");
 	Node* label = getChildByName("congratulations");
 
-	messageBox->setVisible(false);
-	label->setVisible(false);
+	messageBox->setVisible(false);//hide the box
+	label->setVisible(false);//hide the label
 }

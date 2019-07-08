@@ -13,7 +13,7 @@ Scene* SelectScene::createScene() {
 
 		 return false;
 	}
-	 auto ui = SelectUILayer::create();
+	 auto ui = SelectUILayer::create();// create a selectULayer
 	 ui->setPosition(Vec2::ZERO);
 	 this->addChild(ui);
 

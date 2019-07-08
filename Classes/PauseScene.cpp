@@ -14,6 +14,7 @@ bool PauseScene::init() {
 
 		return false;
 	}
+	//create a layer in pause scene
 	auto ui =PauseUILayer ::create();
 	ui->setName("layer");
 	ui->setPosition(Vec2::ZERO);

@@ -7,9 +7,9 @@ class PauseScene :public cocos2d::Scene
 {
 public:
 
-	static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene();//create a pause scene;
 
-	virtual bool init();
+	virtual bool init();//initialize the scene
 
 	CREATE_FUNC(PauseScene);
 };
