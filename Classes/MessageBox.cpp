@@ -17,7 +17,7 @@ bool InteractionMessageBox::init() {
 	messageBox->setVisible(false);
 
 	//create a lebal which show in message box.
-	auto label = Label::createWithTTF("   ", "fonts/sans.ttf", 15);
+	auto label = Label::createWithTTF("   ", "fonts/sans.ttf", 12);
 	this->addChild(label, 1, "congratulations");
 	label->setVisible(false);
 
@@ -43,10 +43,10 @@ void InteractionMessageBox::show(float y,const std::string& name) {
 	}
 	//Wrap the displayed information.
 	for (int i = 0; i < s.length(); i++) {
-		if (i % 50 == 0) {
+		if (i % 42 == 0) {
 			std::string temp = "\n";
-			if (i > 0 && i < s.length() - 1 && std::isalpha(s[i - 1]) && std::isalpha(s[i + 1])) {
-				temp += "-";
+			if (i > 0 && i < s.length() && std::isalpha(s[i - 1]) && std::isalpha(s[i])) {
+				temp = "-\n";
 			}
 			s = s.insert(i, temp);
 		}

@@ -1,7 +1,7 @@
 #pragma once
-#include<string>
+#include <string>
+#include <map>
 
-#include<map>
 struct enemyData//Define a structure to store enemy data
 {
 	std::string name;  

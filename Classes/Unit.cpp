@@ -1,4 +1,5 @@
 #include "Unit.h"
+#include "AnimationLoader.h"
 
 using namespace cocos2d;
 
@@ -106,13 +107,13 @@ void Unit::update(float dt) {
 
 		
 	
-		if (status == Status::Jump && animationIndex + 1 == frameCount[frameName]) {
+		if (status == Status::Jump && animationIndex + 1 == AnimationLoader::frameCount[frameName]) {
 			this->status = Status::Stand;
 			this->stop();
 			speed = 150.0f;
 		}
 
-		animationIndex = (animationIndex + 1) % frameCount[frameName];
+		animationIndex = (animationIndex + 1) % AnimationLoader::frameCount[frameName];
 
 		timer = 0;
 	}

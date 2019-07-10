@@ -97,7 +97,6 @@ bool Enemy::initWithFile(const std::string& filename) {
 
 	std::string type = filename.substr(filename.find("/") + 1).substr(0, 6);
 
-	frameCount[type + "Down"] = frameCount[type + "Up"] = frameCount[type + "Left"] = frameCount[type + "Right"] = 2;
 	status = Status::Stand;
 	return true;
 }

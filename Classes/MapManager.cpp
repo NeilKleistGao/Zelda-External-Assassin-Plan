@@ -33,27 +33,11 @@ bool MapManager::init(const int& index) {
 	map->setName("map");
 	this->addChild(map);
 
+	/*
+	set all static boxes
+	*/
 	this->setPhysicsBoxes();
-
-	auto list = this->getEnemyPosition();
-	auto conf = Config::getInstance();
-
-	for (auto posPair : list) {
-		std::string name = "enemy";
-		name += std::to_string((int)posPair.first.z);
-
-		auto enemy = Enemy::create("enemy/" + name + "Down0.png");
-		enemy->setName(name);
-		enemy->setPosition(Vec2(posPair.first.x, posPair.first.y));
-		enemy->setVertices(Vec2(posPair.first.x, posPair.first.y), Vec2(posPair.second.x, posPair.second.y));
-
-		
-
-		auto data = conf->getEnemy(name);
-		enemy->setAttribute(data.HP, data.damage, data.speed);
-
-		this->addChild(enemy);
-	}
+	this->createEnemy();
 
 	auto boss = BoxSprite::create("Game/boss" + std::to_string(index) + ".png");
 	boss->setPosition(this->getBossPosition());
@@ -92,93 +76,51 @@ void MapManager::addNodeByType(const std::string& type) {
 	int size = typeObjects.size();
 	for (int i = 0; i < size; i++) {
 		auto obj = typeObjects.at(i).asValueMap();
-		float x = obj.at("x").asFloat(), y = obj.at("y").asFloat(),
-			width = obj.at("width").asFloat(), height = obj.at("height").asFloat();
-
-		auto node = Node::create();
-		auto body = PhysicsBody::createBox(Size(width, height));
-		body->getShape(0)->setContactTestBitmask(1);
-		body->setDynamic(false);
-		node->setPosition(x + width / 2, y + height / 2);
-		node->setPhysicsBody(body);
+		auto node = this->createChild(obj, "");
 		node->setName(type);
-
-		this->addChild(node);
 	}
 }
 
 void MapManager::addDoors() {
-	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
-
-	auto doorLayer = map->getObjectGroup("door");
-	auto doorObjects = doorLayer->getObjects();
+	auto doorObjects = this->getObjectVector("door");
 
 	int size = doorObjects.size();
 	for (int i = 0; i < size; i++) {
 		auto obj = doorObjects.at(i).asValueMap();
-		float x = obj.at("x").asFloat(), y = obj.at("y").asFloat(),
-			width = obj.at("width").asFloat(), height = obj.at("height").asFloat();
-
 		std::string require = obj.at("require").asString();
 
-		auto node = Node::create();
-		auto body = PhysicsBody::createBox(Size(width, height));
-		body->getShape(0)->setContactTestBitmask(1);
-		body->setDynamic(false);
-		node->setPosition(x + width / 2, y + height / 2);
-		node->setPhysicsBody(body);
+		auto node = this->createChild(obj);
 		node->setName("door");
 		node->setUserData(new std::string(require));
-
-		this->addChild(node);
 	}
 }
 
 void MapManager::addSpriteByType(const std::string& type, const std::string& filename) {
-	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
-
-	auto typeLayer = map->getObjectGroup(type);
-	auto typeObjects = typeLayer->getObjects();
+	auto typeObjects = this->getObjectVector(type);
 
 	int size = typeObjects.size();
 	for (int i = 0; i < size; i++) {
 		auto obj = typeObjects.at(i).asValueMap();
-		float x = obj.at("x").asFloat(), y = obj.at("y").asFloat(),
-			width = obj.at("width").asFloat(), height = obj.at("height").asFloat();
 
 		std::string content = obj.at("content").asString();
 
-		auto node = BoxSprite::create(filename);
-		node->setPosition(x + width / 2, y + height / 2);
-		node->setDynamic(false);
+		auto node = this->createChild(obj, filename);
 		node->setName(type);
 		node->setUserData(new std::string(content));
-
-		this->addChild(node);
 	}
 }
 
 void MapManager::addPositionNode(const std::string& type) {
-	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
-
-	auto typeLayer = map->getObjectGroup(type);
-	auto typeObjects = typeLayer->getObjects();
+	auto typeObjects = this->getObjectVector(type);
 
 	int size = typeObjects.size();
 	for (int i = 0; i < size; i++) {
 		auto obj = typeObjects.at(i).asValueMap();
-		float x = obj.at("x").asFloat(), y = obj.at("y").asFloat(),
-			width = obj.at("width").asFloat(), height = obj.at("height").asFloat();
 
 		int dx = obj.at("dx").asInt(), dy = obj.at("dy").asInt();
 		int newx = obj.at("newx").asInt(), newy = obj.at("newy").asInt();
 
-		auto node = Node::create();
-		auto body = PhysicsBody::createBox(Size(width, height));
-		body->getShape(0)->setContactTestBitmask(1);
-		body->setDynamic(false);
-		node->setPosition(x + width / 2, y + height / 2);
-		node->setPhysicsBody(body);
+		auto node = this->createChild(obj);
 		node->setName(type);
 		node->setUserData(new std::pair<Vec2, Vec2>(Vec2(dx, dy), Vec2(newx, newy)));
 
@@ -186,11 +128,9 @@ void MapManager::addPositionNode(const std::string& type) {
 	}
 }
 
-std::vector<Vec3Pair> MapManager::getEnemyPosition() {
-	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
-
-	auto enmLayer = map->getObjectGroup("enm");
-	auto enmObjects = enmLayer->getObjects();
+void MapManager::createEnemy() {
+	auto conf = Config::getInstance();
+	auto enmObjects = this->getObjectVector("enm");
 
 	int size = enmObjects.size();
 	std::vector<Vec3Pair> res;
@@ -211,7 +151,20 @@ std::vector<Vec3Pair> MapManager::getEnemyPosition() {
 		}
 	}
 
-	return res;
+	for (auto posPair : res) {
+		std::string name = "enemy";
+		name += std::to_string((int)posPair.first.z);
+
+		auto enemy = Enemy::create("enemy/" + name + "Down0.png");
+		enemy->setName(name);
+		enemy->setPosition(Vec2(posPair.first.x, posPair.first.y));
+		enemy->setVertices(Vec2(posPair.first.x, posPair.first.y), Vec2(posPair.second.x, posPair.second.y));
+
+		auto data = conf->getEnemy(name);
+		enemy->setAttribute(data.HP, data.damage, data.speed);
+
+		this->addChild(enemy);
+	}
 }
 
 int MapManager::getGIDAt(const Vec2& pos, const std::string layerName) {
@@ -238,13 +191,9 @@ Vec2 MapManager::transform(Vec2 v) {
 
 bool MapManager::isNull(const Vec2& v) {
 	int sum = 0;
-	sum += getGIDAt(v, "wall");
-	sum += getGIDAt(v, "door");
-	sum += getGIDAt(v, "hole");
-	sum += getGIDAt(v, "water");
-	sum += getGIDAt(v, "obs");
-	sum += getGIDAt(v, "mov");
-	sum += getGIDAt(v, "box");
+	for (auto str : obsObjects) {
+		sum += getGIDAt(v, str);
+	}
 
 	return (sum == 0);
 }
@@ -253,4 +202,36 @@ void MapManager::resetMovableObject(const cocos2d::Vec2& v1, const cocos2d::Vec2
 	int temp = this->getGIDAt(v1, "mov");
 	this->setGIDAt(v1, "mov", 0);
 	this->setGIDAt(v2, "mov", temp);
+}
+
+Node* MapManager::createChild(const cocos2d::ValueMap& obj, const std::string& filename) {
+	float x = obj.at("x").asFloat(), y = obj.at("y").asFloat(),
+		width = obj.at("width").asFloat(), height = obj.at("height").asFloat();
+	Node* node = nullptr;
+
+	if (filename == "") {
+		node = Node::create();
+		auto body = PhysicsBody::createBox(Size(width, height));
+		body->getShape(0)->setContactTestBitmask(1);
+		body->setDynamic(false);
+		node->setPosition(x + width / 2, y + height / 2);
+		node->setPhysicsBody(body);
+	}
+	else {
+		node = BoxSprite::create(filename);
+		node->setPosition(x + width / 2, y + height / 2);
+		dynamic_cast<BoxSprite*>(node)->setDynamic(false);
+	}
+
+	this->addChild(node);
+	return node;
+}
+
+ValueVector MapManager::getObjectVector(const std::string& name) {
+	auto map = dynamic_cast<TMXTiledMap*>(this->getChildByName("map"));
+
+	auto typeLayer = map->getObjectGroup(name);
+	auto typeObjects = typeLayer->getObjects();
+
+	return typeObjects;
 }

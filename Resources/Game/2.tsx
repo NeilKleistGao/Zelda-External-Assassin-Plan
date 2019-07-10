@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.4" name="2" tilewidth="64" tileheight="64" tilecount="21" columns="7">
- <image source="2.png" width="448" height="192"/>
-</tileset>
+XXTEAÔŒmGü¨ÊDðä³{?"•‡°œLÔþú¯?_wÚ0pRA/1£kÃZ¬œß½éfÄ
+ùÕŽgÑ °=€W5ý@Þìå‚ãv-KÌ§f®is€ø;)¶ŽcŠô•_mYX÷èñ91e#í¨"^„ìãµ¢ëµwö7ówÌM‰t·øÎ	üwéºÎß0”Þì°A†H½©½±
+Nû½µí*ðÞ
+bÁÎ
+™ªˆÇ€a˜îb•/WUÓð±Öw¾¶^ Ðn´ƒÆ¶tÉ‘]’Í´sžðÄJF~N
+ÝW

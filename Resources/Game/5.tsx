@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.4" name="5" tilewidth="64" tileheight="64" tilecount="35" columns="5">
- <image source="5.png" width="320" height="448"/>
- <tile id="33">
-  <objectgroup draworder="index">
-   <object id="1" x="-3" y="0" width="66" height="62"/>
-  </objectgroup>
- </tile>
-</tileset>
+XXTEAÔÖÍÀ¶BYJŽQûG*c[9/-h˜½ü€1Ž. K]Ó•Xë/–_±"o!£?5ŒIÓÑ€ƒv±!m§5#ƒìD/»M?ÞÐÌ«MQ£Bîa+	OoAtˆ4ÎßƒS«„‚øÝ1<ö£©ÝÊzr~‰1Eo<ì>?àVÒ2jŽõk™ËËÆ0ëEÒT‹ÛhMX‰K:æøj{=¡HýKîs¹…`úîGëÒXr•£šåIBô¯Öe(›9Œ‚„ôqVÅTöF(û:²ã4å],ÆöÇ¶Î«Ñ.½ÐlkýL”å›c7HSëXa|¢ßMÐE-y—-ÊÝÆ3f'FÈºD•ÕÒC`X+¥!fÜÍT•u0ø2´ÐRU¯-r'3çDªˆ2ßfito™ð[ì°åÿj+'ÃVˆ_¼<xÏVÎÜª›5(9½Èh|¼Oyî,¼«P3ºC

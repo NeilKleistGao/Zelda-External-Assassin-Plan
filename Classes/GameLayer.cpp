@@ -98,19 +98,19 @@ bool GameLayer::init(int level) {
 			{
 			case EventKeyboard::KeyCode::KEY_A:
 				player->setDirection(Unit::Direction::Left);
-				player->move(Unit::Status::Stand);
+				player->move();
 				break;
 			case EventKeyboard::KeyCode::KEY_D:
 				player->setDirection(Unit::Direction::Right);
-				player->move(Unit::Status::Stand);
+				player->move();
 				break;
 			case EventKeyboard::KeyCode::KEY_S:
 				player->setDirection(Unit::Direction::Down);
-				player->move(Unit::Status::Stand);
+				player->move();
 				break;
 			case EventKeyboard::KeyCode::KEY_W:
 				player->setDirection(Unit::Direction::Up);
-				player->move(Unit::Status::Stand);
+				player->move();
 				break;
 			}
 		}
@@ -136,6 +136,7 @@ bool GameLayer::init(int level) {
 				if (player->getStatus() != Unit::Status::Jump && player->hasCollection("plumage")) {
 					player->stop();
 					player->move(Unit::Status::Jump);
+					AudioEngine::play2d("music/jump.mp3", false, 0.5f);
 				}
 				break;
 			case EventKeyboard::KeyCode::KEY_ESCAPE:
@@ -231,7 +232,7 @@ void GameLayer::onContactBegin(cocos2d::Node* node1, cocos2d::Node* node2) {
 			map->openDoor(node2->getPosition());
 			map->removeChild(node2);
 			AudioEngine::pause(bgmID);
-			AudioEngine::play2d("music/open.mp3");
+			AudioEngine::play2d("music/open.mp3", false, 0.5f);
 			AudioEngine::resumeAll();
 		}
 		else{
@@ -338,7 +339,7 @@ bool GameLayer::interact() {
 		this->isMovable = false;
 
 		AudioEngine::pause(bgmID);
-		interactionID = AudioEngine::play2d("music/get.mp3", false);
+		interactionID = AudioEngine::play2d("music/get.mp3", false, 0.5f);
 
 		std::string temp = content;
 		temp += "*";
@@ -404,7 +405,7 @@ void GameLayer::push() {
 void GameLayer::check(float dt) {
 	auto map = dynamic_cast<MapManager*>(this->getChildByName("map"));
 	auto player = dynamic_cast<Player*>(this->getChildByName("player"));
-	auto realPos = player->getPosition() - map->getOffset();
+	auto realPos = player->getPosition() - map->getOffset() - Vec2(0, player->getBoundingBox().size.height / 2);
 
 	bool hasHurted = false;
 	if (map->isHole(realPos)) {
@@ -494,7 +495,7 @@ void GameLayer::fire() {
 	this->addChild(bullet, 2);
 
 	AudioEngine::pause(bgmID);
-	AudioEngine::play2d("music/fire.mp3");
+	AudioEngine::play2d("music/fire.mp3", false, 0.5f);
 	AudioEngine::resumeAll();
 }
 

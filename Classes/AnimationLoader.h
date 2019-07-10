@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "cocos2d.h"
+#include <map>
 
 class AnimationLoader
 {
@@ -11,5 +11,7 @@ public:
 	@param	animation file path
 	*/
 	static void loadAnimation(const std::string&);
+
+	static std::map<std::string, size_t> frameCount;
 };
 

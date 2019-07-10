@@ -1,4 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.2.4" name="water" tilewidth="64" tileheight="64" tilecount="1" columns="1">
- <image source="water.png" width="64" height="64"/>
-</tileset>
+XXTEAöµõ"É©šUvºk[‰-?¼\F+Ñ¹ù±žƒ+Á3fa½¹zôný‘cI¡„jT¬)zS"jMWÆíg™Gù¨	Þ‡ŠÓ÷K3°>œ÷•+G¯Ã;±Ì«-ÁÇ{ñÉ«òjñ¾–ïeµ‡ÎN¾‘¯í³íp÷±~µ‘î7‰XÂa¥pþjøÍsa,‡¾;YÚE@XJH…Xóm†tecxË¥±À¡&‘«"Ý‹t<Õ¹“êµíqBu¿Èrt¢Q™iƒR©;—?dZlÑc2³×}œ¯£C]5ù^

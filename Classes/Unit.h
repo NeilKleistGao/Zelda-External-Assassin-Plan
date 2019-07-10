@@ -76,7 +76,6 @@ public:
 	}
 
 protected:
-	std::map<std::string, int> frameCount;
 	Direction direction;
 	Status status;
 	int HP, damage, animationIndex;

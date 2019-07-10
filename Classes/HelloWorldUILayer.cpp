@@ -1,11 +1,9 @@
 #include "HelloWorldUILayer.h"
 #include "SelectScene.h"
 #include "audio/include/AudioEngine.h"
-#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
 using namespace experimental;
-using namespace CocosDenshion;
 
 bool HelloWorldUILayer::init() {
 	if (!Layer::init()) {
@@ -37,7 +35,6 @@ bool HelloWorldUILayer::init() {
 	this->schedule(schedule_selector(HelloWorldUILayer::update), 0.6f);
 
 	AudioEngine::play2d("music/begin.mp3", true);
-	//SimpleAudioEngine::getInstance()->playBackgroundMusic("music/begin.mp3", true);
 
 	return true;
 }

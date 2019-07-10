@@ -115,6 +115,16 @@ private:
 	cocos2d::Vec2 getObjectPosition(const std::string&);
 
 	/*
+	create a node with valuemap
+	*/
+	cocos2d::Node* createChild(const cocos2d::ValueMap&, const std::string& filename = "");
+
+	/*
+	get objects vector by name
+	*/
+	cocos2d::ValueVector getObjectVector(const std::string&);
+
+	/*
 	get tile's GID
 	@param	position
 			name of layer
@@ -131,7 +141,7 @@ private:
 	/*
 	get all enemies' 
 	*/
-	std::vector<Vec3Pair> getEnemyPosition();
+	void createEnemy();
 
 	/*
 	turn position in global world into position in tiledmap
@@ -139,5 +149,7 @@ private:
 	cocos2d::Vec2 transform(cocos2d::Vec2);
 
 	cocos2d::Vec2 offset;
+
+	const std::string obsObjects[7] = {"wall", "door", "hole", "water", "obs", "mov", "box"};
 };
 

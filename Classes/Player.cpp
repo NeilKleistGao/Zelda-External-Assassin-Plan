@@ -41,9 +41,9 @@ bool Player::initWithFile(const std::string& filename) {
 		return false;
 	}
 
-	frameCount["playerDown"] = frameCount["playerUp"] = frameCount["playerLeft"] = frameCount["playerRight"] = 2;
-	frameCount["playerSwimDown"] = frameCount["playerSwimUp"] = frameCount["playerSwimLeft"] = frameCount["playerSwimRight"] = 2;
-	frameCount["playerJumpDown"] = frameCount["playerJumpUp"] = frameCount["playerJumpLeft"] = frameCount["playerJumpRight"] = 3;
+	auto cache = SpriteFrameCache::getInstance();
+	
+
 	status = Status::Stand;
 
 	this->schedule(schedule_selector(Player::blink), 0.5f);
@@ -65,7 +65,7 @@ bool Player::hurt(int dmg) {
 	}
 
 	if (dmg > 0) {
-		AudioEngine::play2d("music/hurt.mp3");
+		AudioEngine::play2d("music/hurt.mp3", false, 0.5f);
 	}
 	
 	return Unit::hurt(dmg);

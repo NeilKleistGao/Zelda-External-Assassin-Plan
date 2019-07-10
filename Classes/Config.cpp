@@ -1,9 +1,15 @@
 #include "Config.h"
-#include<fstream>
-#include<stdio.h>
+
+#include "base/Decryptor.h"
+#include "cocos2d.h"
+
+#include <fstream>
+#include <stdio.h>
 #include <sstream>
-#include<map>
-#include<vector>
+#include <map>
+#include <vector>
+
+using namespace cocos2d;
 
 Config* Config::conf = nullptr;//initial conf as NULLptr
 
@@ -17,13 +23,17 @@ Config* Config::getInstance() {//create single case
 /*config .csv  file*/
 
 void Config::loadConfig(std::string filename) {
+	FileUtils::getInstance();
 	if (filename == "config/enemy.csv") {
-		std::fstream EnemyFile(filename);
+		std::istringstream EnemyFile(FileUtils::getInstance()->getStringFromFile(filename));
 		std::string data;
-		std::getline(EnemyFile,data);//ignore the first line
-		while (std::getline(EnemyFile, data)) {
+		char buff[128];
+
+		EnemyFile.getline(buff,128);//ignore the first line
+		while (EnemyFile.getline(buff, 128)) {
+			data = buff;
 			std::istringstream sin(data);
-		std::	vector<std::string> fields; //define a vector
+			std::vector<std::string> fields; //define a vector
 			std::string field;
 			
 			while (getline(sin, field, ',')) //Read the characters in the string stream sin into the field string with a comma as the separator
@@ -31,14 +41,16 @@ void Config::loadConfig(std::string filename) {
 				fields.push_back(field); //Add the string just read to the vector fields
 			}
 			EnemyData.insert(std::pair<std::string, enemyData>(fields[0], enemyData(atoi(fields[1].c_str()), atoi(fields[2].c_str()), atoi(fields[3].c_str()))));
-	}
-		EnemyFile.close();
+		}
 	}
 	else if (filename == "config/objects.csv") {
-		std::fstream ObjectFile(filename);
+		std::istringstream ObjectFile(FileUtils::getInstance()->getStringFromFile(filename));
 		std::string data;
-		std::getline(ObjectFile, data);//ignore the first line
-		while (std::getline(ObjectFile, data)) {
+		char buff[128];
+
+		ObjectFile.getline(buff, 128);//ignore the first line
+		while (ObjectFile.getline(buff, 128)) {
+			data = buff;
 			std::istringstream sin(data);
 			std::vector<std::string> fields; //define a vector
 			std::string field;
@@ -48,7 +60,6 @@ void Config::loadConfig(std::string filename) {
 			}
 			ObjectData.insert(std::pair<std::string, objectData>(fields[0], objectData(fields[1],fields[2])));
 		}
-		ObjectFile.close();
 	}
 	
 	else {

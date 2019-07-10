@@ -8,7 +8,6 @@ Scene* GameScene::createScene(int level) {
 	auto scene = GameScene::createWithPhysics();
 	auto theWorld = scene->getPhysicsWorld();
 
-	//theWorld->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 	theWorld->setGravity(Vec2::ZERO);
 
 	auto game = GameLayer::create(level);
